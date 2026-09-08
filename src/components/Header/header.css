@@ -1,0 +1,191 @@
+:root {
+  --gap-haircut: 5.25rem;
+  --gap-styling: 5.94rem;
+  --gap-dye: 2.06rem;
+  --gap-care: 7.75rem;
+  --gap-master: clamp(16.6rem, 34vw, 24.44rem);
+  --gap-profi: clamp(17.25rem, 38vw, 25.17rem);
+  --gap-time-work: 0.9125rem;
+  --gap-contact: 0.91375rem;
+  --gap-revmast: 2.575rem;
+  --haircut: var(--gap-haircut);
+  --styling: var(--gap-styling);
+  --dye: var(--gap-dye);
+  --care: var(--gap-care);
+  --master: var(--gap-master);
+  --profi: var(--gap-profi);
+  --time-work: var(--gap-time-work);
+  --contact: var(--gap-contact);
+  --revmast: var(--gap-revmast);
+
+  --color-bg-deep: #010101;
+  --color-bg-card: #111111;
+  --color-bg-black: #000000;
+  --color-white: #ffffff;
+  --color-accent: #71165b;
+  --color-accent-shadow: rgba(113, 22, 92, 0.3);
+  --color-border-haircut: #727272;
+  --color-border-translucent: rgba(255, 255, 255, 0.08);
+  --color-border-map: rgba(255, 255, 255, 0.1);
+
+  --color-brand-ozon: #1b1bf8;
+  --color-brand-wb-start: #cb11ab;
+  --color-brand-wb-end: #5f2a87;
+  --a11y-font-ratio: 1;
+}
+
+@font-face {
+  font-family: "Vera Humana";
+  src: url(../../assets/fonts/verahumana95.ttf) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Circe";
+  src: url(../../assets/fonts/CirceRounded-Regular.ttf) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+button {
+  border: none;
+}
+
+site-header {
+  display: block;
+  width: 100%;
+}
+
+.container-for-button {
+  display: inline-flex;
+  padding: 16px 2px;
+  justify-content: flex-end;
+  align-items: center;
+}
+.button-login {
+  border-radius: 10px;
+  background-color: var(--color-accent);
+  width: 5.8125rem;
+  height: 3.1875rem;
+  font-size: 0.9375rem;
+  font-family: Circe;
+  color: var(--color-white);
+}
+header {
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100rem;
+  background-image: url("../set/image/Womanfon.jpg");
+  background-repeat: no-repeat;
+  background-position: right;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10.96rem;
+  background-color: var(--color-bg-deep);
+}
+.head {
+  display: flex;
+  padding: clamp(15px, 2vh, 25px) clamp(15px, 5vw, 90px);
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  position: relative;
+  z-index: 1002;
+  background-color: var(--color-bg-black);
+}
+.item-icon {
+  color: var(--color-white);
+  font-family: "Vera Humana", sans-serif;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 180%;
+  text-transform: uppercase;
+  z-index: 1002;
+  flex-shrink: 0;
+  margin-right: clamp(15px, 2.5vw, 40px);
+}
+.navigation {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: clamp(0.8rem, 1.2vw, 2.2rem);
+  margin-left: auto;
+  flex-wrap: nowrap;
+}
+.navigation-item {
+  text-decoration: none;
+  color: var(--color-white);
+  font-family: "Circe";
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+}
+.container-lang {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.burger {
+  display: none;
+  cursor: pointer;
+  width: 30px;
+  height: 20px;
+  position: relative;
+  z-index: 1002;
+}
+.burger span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: var(--color-white);
+  border-radius: 9px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: 0.25s ease-in-out;
+}
+.burger span:nth-child(1) {
+  top: 0px;
+}
+.burger span:nth-child(2) {
+  top: 9px;
+}
+.burger span:nth-child(3) {
+  top: 18px;
+}
+
+.burger.active span:nth-child(1) {
+  top: 9px;
+  transform: rotate(135deg);
+}
+.burger.active span:nth-child(2) {
+  opacity: 0;
+  left: -60px;
+}
+.burger.active span:nth-child(3) {
+  top: 9px;
+  transform: rotate(-135deg);
+}
+.accessibility-open-btn {
+  background: transparent;
+  color: var(--color-white);
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
