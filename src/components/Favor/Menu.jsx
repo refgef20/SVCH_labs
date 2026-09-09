@@ -7,7 +7,7 @@ class Menu extends Component {
       <div className="hair">
         <ul className="container-kinds-hairStyle list-subcat">
           {this.props.favors.map((fav) => (
-            <li className="kinds-hairStyle kinds-styling">
+            <li key={fav.favor} className="kinds-hairStyle kinds-styling">
               <a href="!#" className="items-kinds-hair">
                 {fav.favor}
               </a>
