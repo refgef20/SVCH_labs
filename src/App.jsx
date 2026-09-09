@@ -9,6 +9,7 @@ import Favor from "./components/Favor/Favor.jsx";
 import Masters from "./components/Masters/Masters.jsx";
 import Reviews from "./components/Reviews/Reviews.jsx";
 import OurWorks from "./components/OurWorks/OurWorks.jsx";
+import Product from "./components/Product/Product.jsx";
 
 const favors = [
   {
@@ -79,6 +80,7 @@ function App() {
         <Masters masters={masters} />
         <Reviews />
         <OurWorks works={works} />
+        <Product />
       </main>
     </>
   );
