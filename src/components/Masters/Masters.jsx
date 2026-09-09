@@ -18,7 +18,7 @@ class Masters extends Component {
             </p>
             <div className="cards-masters" id="masters-container">
               {this.props.masters.map((master) => (
-                <div className="card">
+                <div key={master.name} className="card">
                   <img src={master.photo} alt="" />
                   <div className="container-review-master">
                     <div className="review-master">

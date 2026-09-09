@@ -10,6 +10,7 @@ import Masters from "./components/Masters/Masters.jsx";
 import Reviews from "./components/Reviews/Reviews.jsx";
 import OurWorks from "./components/OurWorks/OurWorks.jsx";
 import Product from "./components/Product/Product.jsx";
+import Footer from "./components/Footer/Footer.jsx";
 
 const favors = [
   {
@@ -82,6 +83,7 @@ function App() {
         <OurWorks works={works} />
         <Product />
       </main>
+      <Footer />
     </>
   );
 }
