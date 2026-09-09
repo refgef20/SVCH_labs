@@ -7,6 +7,7 @@ import Header from "./components/Header/header.jsx";
 import HeroSection from "./components/HeroSection/heroSection.jsx";
 import Favor from "./components/Favor/Favor.jsx";
 import Masters from "./components/Masters/Masters.jsx";
+import Reviews from "./components/Reviews/Reviews.jsx";
 
 const favors = [
   {
@@ -67,6 +68,7 @@ function App() {
         <HeroSection />
         <Favor favors={favors} />
         <Masters masters={masters} />
+        <Reviews />
       </main>
     </>
   );
