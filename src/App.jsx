@@ -8,6 +8,7 @@ import HeroSection from "./components/HeroSection/heroSection.jsx";
 import Favor from "./components/Favor/Favor.jsx";
 import Masters from "./components/Masters/Masters.jsx";
 import Reviews from "./components/Reviews/Reviews.jsx";
+import OurWorks from "./components/OurWorks/OurWorks.jsx";
 
 const favors = [
   {
@@ -57,6 +58,14 @@ const masters = [
       "	https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80",
   },
 ];
+const works = [
+  { photo: "src/assets/images/work1.jpg" },
+  { photo: "src/assets/images/work2.jpg" },
+  { photo: "src/assets/images/work3.jpg" },
+  { photo: "src/assets/images/work4.jpg" },
+  { photo: "src/assets/images/work5.jpg" },
+  { photo: "src/assets/images/work6.png" },
+];
 
 function App() {
   const [count, setCount] = useState(0);
@@ -69,6 +78,7 @@ function App() {
         <Favor favors={favors} />
         <Masters masters={masters} />
         <Reviews />
+        <OurWorks works={works} />
       </main>
     </>
   );
