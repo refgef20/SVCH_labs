@@ -1,17 +1,13 @@
 import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import heroImg from "./assets/hero.png";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import "./App.css";
 import Header from "./components/Header/header.jsx";
-import HeroSection from "./components/HeroSection/heroSection.jsx";
-import Favor from "./components/Favor/Favor.jsx";
-import Masters from "./components/Masters/Masters.jsx";
-import Reviews from "./components/Reviews/Reviews.jsx";
-import OurWorks from "./components/OurWorks/OurWorks.jsx";
-import Product from "./components/Product/Product.jsx";
-import Footer from "./components/Footer/Footer.jsx";
 
+import Footer from "./components/Footer/Footer.jsx";
+import HomePage from "./Pages/Home.jsx";
 const favors = [
   {
     favor: "Стрижка",
@@ -73,18 +69,20 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <BrowserRouter>
       <Header />
       <main>
-        <HeroSection />
-        <Favor favors={favors} />
-        <Masters masters={masters} />
-        <Reviews />
-        <OurWorks works={works} />
-        <Product />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage favors={favors} masters={masters} works={works} />
+            }
+          ></Route>
+        </Routes>
       </main>
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 

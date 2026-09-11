@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "../Header/header.css";
 import React, { Component } from "react";
 const Header = () => {
@@ -74,53 +75,61 @@ const Header = () => {
         </div>
         <ul className="navigation" id="menu-overlay">
           <li>
-            <a className="navigation-item" href="#" data-i18n="header.services">
+            <a
+              className="navigation-item"
+              href="#favor"
+              data-i18n="header.services"
+            >
               Услуги
-            </a>
-          </li>
-          <li>
-            <a className="navigation-item" href="#" data-i18n="header.masters">
-              Мастера
-            </a>
-          </li>
-          <li>
-            <a className="navigation-item" href="#" data-i18n="header.reviews">
-              Отзывы
-            </a>
-          </li>
-          <li>
-            <a className="navigation-item" href="#" data-i18n="header.main">
-              Главная
-            </a>
-          </li>
-          <li>
-            <a className="navigation-item" href="#" data-i18n="header.cart">
-              Корзина
-            </a>
-          </li>
-          <li>
-            <a className="navigation-item" href="#" data-i18n="header.catalog">
-              Каталог
             </a>
           </li>
           <li>
             <a
               className="navigation-item"
-              href="#"
+              href="#master"
+              data-i18n="header.masters"
+            >
+              Мастера
+            </a>
+          </li>
+          <li>
+            <Link className="navigation-item" to="/" data-i18n="header.reviews">
+              Отзывы
+            </Link>
+          </li>
+          <li>
+            <Link className="navigation-item" to="/" data-i18n="header.main">
+              Главная
+            </Link>
+          </li>
+          <li>
+            <Link className="navigation-item" to="/" data-i18n="header.cart">
+              Корзина
+            </Link>
+          </li>
+          <li>
+            <Link className="navigation-item" to="/" data-i18n="header.catalog">
+              Каталог
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="navigation-item"
+              to="/"
               data-i18n="header.favorites"
             >
               Избранное
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="navigation-item" href="#" data-i18n="header.history">
+            <Link className="navigation-item" to="/" data-i18n="header.history">
               Заказы
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="navigation-item" href="#" data-i18n="header.profile">
+            <Link className="navigation-item" to="/" data-i18n="header.profile">
               Мой кабинет
-            </a>
+            </Link>
           </li>
           <li>
             <button

@@ -1,5 +1,4 @@
 import "../HeroSection/heroSection.css";
-import React, { Component } from "react";
 
 const Description = ({ tittle }) => {
   return (
