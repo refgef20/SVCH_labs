@@ -1,4 +1,5 @@
 import "./heroSection.css";
+import "../../index.css";
 import Description from "./Description";
 import ContInfo from "./ContInfo";
 const HeroSection = () => {

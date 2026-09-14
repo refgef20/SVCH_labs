@@ -1,4 +1,5 @@
 import "./heroSection.css";
+import "../../index.css";
 import React, { Component } from "react";
 const ContInfo = ({ phone }) => {
   return (

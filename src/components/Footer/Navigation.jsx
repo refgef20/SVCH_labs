@@ -1,4 +1,5 @@
 import "../Footer/footer.css";
+import "../../index.css";
 
 const Navigation = () => {
   return (

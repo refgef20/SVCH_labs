@@ -1,4 +1,5 @@
 import "../Reviews/reviews.css";
+import "../../index.css";
 
 const Reviews = () => {
   return (

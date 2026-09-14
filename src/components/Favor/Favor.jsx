@@ -1,4 +1,5 @@
 import "./favor.css";
+import "../../index.css";
 import Menu from "./Menu";
 import DescFavor from "./DescFavor";
 

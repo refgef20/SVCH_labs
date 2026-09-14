@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "../Header/header.css";
+import "../../index.css";
 import React, { Component } from "react";
 const Header = () => {
   return (
@@ -108,7 +109,11 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link className="navigation-item" to="/" data-i18n="header.catalog">
+            <Link
+              className="navigation-item"
+              to="/catalog"
+              data-i18n="header.catalog"
+            >
               Каталог
             </Link>
           </li>

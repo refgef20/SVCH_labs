@@ -1,4 +1,5 @@
 import "./favor.css";
+import "../../index.css";
 
 const DescFavor = ({ favors }) => {
   return (

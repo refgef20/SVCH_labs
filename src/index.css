@@ -4,3 +4,22 @@
   margin: 0 auto;
   border: #71165b;
 }
+::selection {
+  background-color: #00090e;
+  color: palevioletred;
+}
+a {
+  transition: color 0.6s ease-in-out;
+}
+a:hover {
+  color: rgba(255, 0, 247, 0.572);
+}
+button {
+  transition: 0.4s ease-out;
+}
+button:hover {
+  transform: scale(1.2);
+}
+button:active {
+  transform: scale(0.43);
+}

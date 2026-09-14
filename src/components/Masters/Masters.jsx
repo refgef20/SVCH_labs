@@ -1,4 +1,5 @@
 import "./masters.css";
+import "../../index.css";
 
 const Masters = ({ masters }) => {
   return (

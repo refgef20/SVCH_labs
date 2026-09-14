@@ -1,4 +1,5 @@
 import "./favor.css";
+import "../../index.css";
 import React, { Component } from "react";
 
 const Menu = ({ favors }) => {

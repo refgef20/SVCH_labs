@@ -1,4 +1,5 @@
 import "../Footer/footer.css";
+import "../../index.css";
 import React, { Component } from "react";
 
 const MenuCard = () => {

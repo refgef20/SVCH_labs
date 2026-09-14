@@ -1,4 +1,5 @@
 import "../Product/Product.css";
+import "../../index.css";
 
 const Product = () => {
   return (

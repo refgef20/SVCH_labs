@@ -1,4 +1,5 @@
 import "../HeroSection/heroSection.css";
+import "../../index.css";
 
 const Description = ({ tittle }) => {
   return (

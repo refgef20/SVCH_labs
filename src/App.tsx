@@ -1,14 +1,31 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import heroImg from "./assets/hero.png";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "./assets/vite.svg";
-import "./App.css";
 import Header from "./components/Header/header.jsx";
-
+import Catalog from "./Pages/Catalog.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import HomePage from "./Pages/Home.jsx";
-const favors = [
+
+// 1. Описываем типы данных для каждого массива (интерфейсы)
+export interface FavorItem {
+  favor: string;
+  description: string;
+}
+
+export interface MasterItem {
+  name: string;
+  role: string;
+  specialty: string;
+  experience: string;
+  price: string;
+  photo: string;
+}
+
+export interface WorkItem {
+  photo: string;
+}
+
+// 2. Указываем тип для каждого массива (например, FavorItem[])
+const favors: FavorItem[] = [
   {
     favor: "Стрижка",
     description:
@@ -27,7 +44,8 @@ const favors = [
     description: "Восстанавливающие процедуры для здоровья и красоты волос.",
   },
 ];
-const masters = [
+
+const masters: MasterItem[] = [
   {
     name: "АННА АСТАХОВА",
     role: "МАСТЕР",
@@ -53,10 +71,11 @@ const masters = [
     experience: "Опыт более 8 лет",
     price: "4399 ₽",
     photo:
-      "	https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80",
   },
 ];
-const works = [
+
+const works: WorkItem[] = [
   { photo: "src/assets/images/work1.jpg" },
   { photo: "src/assets/images/work2.jpg" },
   { photo: "src/assets/images/work3.jpg" },
@@ -66,7 +85,7 @@ const works = [
 ];
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState<number>(0);
 
   return (
     <BrowserRouter>
@@ -78,7 +97,8 @@ function App() {
             element={
               <HomePage favors={favors} masters={masters} works={works} />
             }
-          ></Route>
+          />
+          <Route path="/catalog" element={<Catalog />} />
         </Routes>
       </main>
       <Footer />

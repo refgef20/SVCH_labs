@@ -3,7 +3,7 @@ import Favor from "../components/Favor/Favor.jsx";
 import Masters from "../components/Masters/Masters.jsx";
 import Reviews from "../components/Reviews/Reviews.jsx";
 import OurWorks from "../components/OurWorks/OurWorks.jsx";
-import Product from "../components/Product/Product.jsx";
+import Product from "../components/Product/Prod.jsx";
 
 const HomePage = (props) => {
   return (

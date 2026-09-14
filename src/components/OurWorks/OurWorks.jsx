@@ -1,4 +1,5 @@
 import "../OurWorks/ourWorks.css";
+import "../../index.css";
 
 const OurWorks = ({ works }) => {
   return (
