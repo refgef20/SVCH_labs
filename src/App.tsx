@@ -4,8 +4,8 @@ import Header from "./components/Header/header.jsx";
 import Catalog from "./Pages/Catalog.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import HomePage from "./Pages/Home.jsx";
+import Error from "./Pages/Error.js";
 
-// 1. Описываем типы данных для каждого массива (интерфейсы)
 export interface FavorItem {
   favor: string;
   description: string;
@@ -24,7 +24,6 @@ export interface WorkItem {
   photo: string;
 }
 
-// 2. Указываем тип для каждого массива (например, FavorItem[])
 const favors: FavorItem[] = [
   {
     favor: "Стрижка",
@@ -99,6 +98,7 @@ function App() {
             }
           />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="*" element={<Error />} />
         </Routes>
       </main>
       <Footer />
