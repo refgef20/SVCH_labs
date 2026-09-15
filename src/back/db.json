@@ -642,7 +642,7 @@
       "experience_en": ["Top stylist", "Experience over 7 years"]
     },
     {
-      "id": "m6",
+      "id": "m7",
       "name_ru": "Мария Солоха",
       "name_en": "Maria Soloha",
       "price": 1699,
@@ -844,6 +844,5 @@
       "date": "25.05.2026",
       "id": "Aw_8-ono_eE"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

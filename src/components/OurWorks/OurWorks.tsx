@@ -1,7 +1,12 @@
 import "../OurWorks/ourWorks.css";
 import "../../index.css";
+import { WorkItem } from "../../App";
 
-const OurWorks = ({ works }) => {
+interface Works {
+  works: WorkItem[];
+}
+
+const OurWorks = ({ works }: Works) => {
   return (
     <section className="container-our-works">
       <div className="our-works">
