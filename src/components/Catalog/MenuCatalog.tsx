@@ -4,7 +4,8 @@ import Products from "../Catalog/Products.tsx";
 import { Product } from "./IProduct";
 
 const MenuCatalog = () => {
-  const [products, setProduct] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [idSel, setId] = useState<number | null>(null);
   useEffect(() => {
     async function fetchProd() {
       await fetch("../src/back/db.json")
@@ -14,7 +15,7 @@ const MenuCatalog = () => {
         })
         .then((data) => {
           console.log("УРА, ДАННЫЕ ПРИШЛИ:", data);
-          setProduct(data.products);
+          setProducts(data.products);
         })
 
         .catch((err) => {
@@ -23,10 +24,38 @@ const MenuCatalog = () => {
     }
     fetchProd();
   }, []);
+  function Delete(id: number) {
+    console.log("Родитель услышал клик! Удаляем ID:", id);
+    setProducts(products.filter((product) => product.id != id));
+  }
+  function Redact(id: number | null) {
+    setId(id);
+  }
+
+  function Save(id: number, name: string, description: string, price: number) {
+    setProducts(
+      products.map((product) =>
+        product.id == id
+          ? {
+              ...product,
+              name_en: name,
+              description_en: description,
+              price: price,
+            }
+          : product,
+      ),
+    );
+  }
   return (
     <section className="container-for-catalog">
       <div className="container-for-catalog-cards">
-        <Products products={products} />
+        <Products
+          products={products}
+          onDelete={Delete}
+          onRedact={Redact}
+          onSave={Save}
+          idSel={idSel}
+        />
       </div>
     </section>
   );

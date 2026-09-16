@@ -44,36 +44,6 @@ const favors: FavorItem[] = [
   },
 ];
 
-const masters: MasterItem[] = [
-  {
-    name: "АННА АСТАХОВА",
-    role: "МАСТЕР",
-    specialty: "Мужская стрижка",
-    experience: "Опыт более 5 лет",
-    price: "1899 ₽",
-    photo:
-      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    name: "ИРА СОКОЛОВА",
-    role: "СТАЖЕР",
-    specialty: "Младший стилист",
-    experience: "Опыт 1 год",
-    price: "899 ₽",
-    photo:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    name: "КАТЯ КЛИМОВА",
-    role: "ПРОФИ",
-    specialty: "Колорист-эксперт",
-    experience: "Опыт более 8 лет",
-    price: "4399 ₽",
-    photo:
-      "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80",
-  },
-];
-
 const works: WorkItem[] = [
   { photo: "src/assets/images/work1.jpg" },
   { photo: "src/assets/images/work2.jpg" },
@@ -93,9 +63,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={
-              <HomePage favors={favors} masters={masters} works={works} />
-            }
+            element={<HomePage favors={favors} works={works} />}
           />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="*" element={<Error />} />

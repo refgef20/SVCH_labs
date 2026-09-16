@@ -55,7 +55,7 @@
 }
 .container-for-button-catalog {
   display: flex;
-  gap: 135px;
+  gap: 95px;
   justify-content: flex-start;
   border-radius: 90px;
   align-items: center;
@@ -254,4 +254,39 @@ button:active {
   gap: 15px;
   width: 100%;
   flex-wrap: wrap;
+}
+.cont-redact {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+/* --- СТИЛИ ДЛЯ ИНПУТОВ РЕДАКТИРОВАНИЯ --- */
+
+/* Общие стили для всех инпутов в карточке */
+.container-for-every-card-mets input {
+  background: rgba(255, 255, 255, 0.08); /* полупрозрачный фон */
+  color: #ffffff; /* белый читаемый текст */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* тонкая аккуратная рамка */
+  border-radius: 8px; /* скруглённые углы */
+  padding: 4px 10px; /* компактные внутренние отступы */
+  font-family: inherit; /* тот же шрифт, что и на сайте */
+  font-size: 0.95rem;
+  width: 100%; /* растягиваем по ширине блока */
+  outline: none; /* убираем стандартную синюю обводку браузера */
+  transition: all 0.2s ease;
+}
+
+/* Красивая фиолетовая подсветка, когда кликаешь в поле */
+.container-for-every-card-mets input:focus {
+  border-color: #930270; /* твой фирменный цвет */
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 8px rgba(147, 2, 112, 0.5);
+}
+
+/* Отдельно для поля цены (чтобы оно было маленьким и овальным) */
+.container-for-button-catalog input {
+  width: 90px; /* компактная ширина только под цифры */
+  border-radius: 20px; /* сильнее скругляем под капсулу */
+  padding: 2px 8px;
+  font-weight: bold;
 }

@@ -10,7 +10,7 @@ const HomePage = (props) => {
     <>
       <HeroSection />
       <Favor favors={props.favors} />
-      <Masters masters={props.masters} />
+      <Masters />
       <Reviews />
       <OurWorks works={props.works} />
       <Product />

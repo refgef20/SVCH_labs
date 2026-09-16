@@ -3,6 +3,7 @@ import "../../index.css";
 import { useState, useEffect } from "react";
 
 const Masters = () => {
+  const [index, setIndex] = useState(0);
   const [masters, setMaster] = useState([]);
   const [selMaster, setSelmaster] = useState(null);
 
@@ -23,13 +24,20 @@ const Masters = () => {
           alt="Назад"
           className="arrow-left"
           style={{ cursor: "pointer" }}
+          onClick={() => {
+            if (index === 0) {
+              setIndex(masters.length - 3);
+            } else {
+              setIndex(index - 1);
+            }
+          }}
         />
         <div className="master">
           <p className="tittle-master" data-i18n="main.masters_title">
             мастера
           </p>
           <div className="cards-masters" id="masters-container">
-            {masters.map((master) => (
+            {masters.slice(index, index + 3).map((master) => (
               <div
                 onClick={() => {
                   setSelmaster(master);
@@ -72,6 +80,13 @@ const Masters = () => {
           alt="Вперед"
           className="arrow-right"
           style={{ cursor: "pointer" }}
+          onClick={() => {
+            if (index === masters.length - 3) {
+              setIndex(0);
+            } else {
+              setIndex(index + 1);
+            }
+          }}
         />
       </div>
       {selMaster && (
