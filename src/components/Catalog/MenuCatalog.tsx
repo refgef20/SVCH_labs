@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import "../Catalog/catalog.css";
 import Products from "../Catalog/Products.tsx";
 import { Product } from "./IProduct";
+import Butt from "./FunctionalButtons.tsx";
 
 const MenuCatalog = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [idSel, setId] = useState<number | null>(null);
   useEffect(() => {
     async function fetchProd() {
@@ -16,6 +18,7 @@ const MenuCatalog = () => {
         .then((data) => {
           console.log("УРА, ДАННЫЕ ПРИШЛИ:", data);
           setProducts(data.products);
+          setAllProducts(data.products);
         })
 
         .catch((err) => {
@@ -46,11 +49,38 @@ const MenuCatalog = () => {
       ),
     );
   }
+  function FindName(name: string) {
+    console.log("Данные здесь");
+
+    if (name == "") {
+      setAllProducts(products);
+      return;
+    }
+    console.log(name);
+    const filtered = allProducts.filter((product) =>
+      product.name_en.toLowerCase().startsWith(name.toLowerCase()),
+    );
+
+    setAllProducts(filtered);
+  }
+  function SortName() {
+    setProducts(
+      products.toSorted((a, b) => a.name_en.localeCompare(b.name_en)),
+    );
+  }
+  function SortPrice() {
+    setProducts(products.toSorted((a, b) => a.price - b.price));
+  }
   return (
     <section className="container-for-catalog">
+      <Butt
+        OnsortName={SortName}
+        OnSortCost={SortPrice}
+        OnFindName={FindName}
+      />
       <div className="container-for-catalog-cards">
         <Products
-          products={products}
+          products={allProducts}
           onDelete={Delete}
           onRedact={Redact}
           onSave={Save}

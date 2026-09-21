@@ -5,6 +5,14 @@ import Catalog from "./Pages/Catalog.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import HomePage from "./Pages/Home.jsx";
 import Error from "./Pages/Error.js";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Vera Humana","Circe", sans-serif',
+  },
+});
 
 export interface FavorItem {
   favor: string;
@@ -57,20 +65,22 @@ function App() {
   const [count, setCount] = useState<number>(0);
 
   return (
-    <BrowserRouter>
-      <Header />
-      <main>
-        <Routes>
-          <Route
-            path="/"
-            element={<HomePage favors={favors} works={works} />}
-          />
-          <Route path="/catalog" element={<Catalog />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-      </main>
-      <Footer />
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Header />
+        <main>
+          <Routes>
+            <Route
+              path="/"
+              element={<HomePage favors={favors} works={works} />}
+            />
+            <Route path="/catalog" element={<Catalog />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+        </main>
+        <Footer />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

@@ -17,7 +17,7 @@ const Products = ({
       <img className="img-prod" src={product.photo} alt="" />
       {product.id == idSel ? (
         <input
-          type="text"
+          type="text"    
           value={name}
           className="item-first-card-mets"
           onChange={(e) => setName(e.target.value)}
