@@ -5,13 +5,13 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Product } from "./IProduct";
 
 interface ButtProp {
-  OnsortName: () => void;
+  OnsortRate: () => void;
   OnSortCost: () => void;
   OnFindName: (name: string) => void;
 }
 
-const Butt = ({ OnsortName, OnSortCost, OnFindName }: ButtProp) => {
-  const [query, setQuery] = useState("");
+const Butt = ({ OnsortRate, OnSortCost, OnFindName }: ButtProp) => {
+  const [value, setValue] = useState("sort");
 
   return (
     <Stack sx={{ gap: "10px", flexDirection: "row" }}>
@@ -33,18 +33,27 @@ const Butt = ({ OnsortName, OnSortCost, OnFindName }: ButtProp) => {
         }}
         onChange={(e) => {
           const next = e.target.value;
-          setQuery(next);
           OnFindName(next);
         }}
       />
 
       <Select
-        value="sort"
+        value={value}
         sx={{ color: "white", border: "2px solid white", borderRadius: "20px" }}
+        onChange={(e) => {
+          setValue(e.target.value);
+          if (e.target.value == "price") {
+            OnSortCost();
+          } else if (e.target.value == "rate") {
+            OnsortRate();
+          }
+        }}
       >
-        <MenuItem value="sort">Сортировка</MenuItem>
-        <MenuItem value="opt">По цене</MenuItem>
-        <MenuItem value="oion">По рейтингу</MenuItem>
+        <MenuItem value="sort" disabled>
+          Сортировка
+        </MenuItem>
+        <MenuItem value="price">По цене</MenuItem>
+        <MenuItem value="rate">По рейтингу</MenuItem>
       </Select>
     </Stack>
   );

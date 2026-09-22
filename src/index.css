@@ -4,6 +4,29 @@
   margin: 0 auto;
   border: #71165b;
 }
+:root {
+  --color-bg-deep: #010101;
+  --color-bg-card: #111111;
+  --color-accent: #71165b;
+  --color-white: #ffffff;
+  --color-border-dark: #333333;
+  --color-text-gray: rgba(255, 255, 255, 0.6);
+
+  --font-family-title: "Vera Humana", sans-serif;
+  --font-family-body: "Circe", sans-serif;
+
+  --size-h1: clamp(2.5rem, 8vw, 6.875rem);
+  --size-h2: clamp(1.75rem, 4.5vw, 3.25rem);
+  --size-h3: clamp(1.05rem, 1.8vw, 1.125rem);
+  --size-body: clamp(0.9rem, 1.25vw, 1rem);
+
+  --pad-container: clamp(1rem, 5vw, 6.25rem);
+  --gap-large: clamp(1.5rem, 4vw, 3.5rem);
+  --gap-medium: clamp(1rem, 2vw, 2rem);
+  --gap-small: clamp(0.5rem, 1.2vw, 1rem);
+
+  --color-bg-tab: #222222;
+}
 ::selection {
   background-color: #00090e;
   color: palevioletred;
@@ -22,4 +45,7 @@ button:hover {
 }
 button:active {
   transform: scale(0.43);
+}
+main {
+  background: var(--color-bg-deep);
 }

@@ -104,7 +104,11 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link className="navigation-item" to="/" data-i18n="header.cart">
+            <Link
+              className="navigation-item"
+              to="/cart"
+              data-i18n="header.cart"
+            >
               Корзина
             </Link>
           </li>
@@ -120,7 +124,7 @@ const Header = () => {
           <li>
             <Link
               className="navigation-item"
-              to="/"
+              to="/favourite"
               data-i18n="header.favorites"
             >
               Избранное

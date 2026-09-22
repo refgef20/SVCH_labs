@@ -3,8 +3,9 @@ import "../Catalog/catalog.css";
 import Products from "../Catalog/Products.tsx";
 import { Product } from "./IProduct";
 import Butt from "./FunctionalButtons.tsx";
+import { Catal } from "../../App.tsx";
 
-const MenuCatalog = () => {
+const MenuCatalog = ({ add, addFav }: Catal) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [idSel, setId] = useState<number | null>(null);
@@ -29,14 +30,14 @@ const MenuCatalog = () => {
   }, []);
   function Delete(id: number) {
     console.log("Родитель услышал клик! Удаляем ID:", id);
-    setProducts(products.filter((product) => product.id != id));
+    setAllProducts(products.filter((product) => product.id != id));
   }
   function Redact(id: number | null) {
     setId(id);
   }
 
   function Save(id: number, name: string, description: string, price: number) {
-    setProducts(
+    setAllProducts(
       products.map((product) =>
         product.id == id
           ? {
@@ -63,18 +64,18 @@ const MenuCatalog = () => {
 
     setAllProducts(filtered);
   }
-  function SortName() {
-    setProducts(
-      products.toSorted((a, b) => a.name_en.localeCompare(b.name_en)),
-    );
+  function SortRate() {
+    console.log("Я ЗДЕСЬ Р");
+    setAllProducts(products.toSorted((a, b) => a.rating - b.rating));
   }
   function SortPrice() {
-    setProducts(products.toSorted((a, b) => a.price - b.price));
+    console.log("Я ЗДЕСЬ ц");
+    setAllProducts(products.toSorted((a, b) => a.price - b.price));
   }
   return (
     <section className="container-for-catalog">
       <Butt
-        OnsortName={SortName}
+        OnsortRate={SortRate}
         OnSortCost={SortPrice}
         OnFindName={FindName}
       />
@@ -84,6 +85,8 @@ const MenuCatalog = () => {
           onDelete={Delete}
           onRedact={Redact}
           onSave={Save}
+          add={add}
+          addFav={addFav}
           idSel={idSel}
         />
       </div>
