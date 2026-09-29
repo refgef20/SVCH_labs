@@ -9,13 +9,15 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Menu = ({ favors }) => {
+  const { t, i18n } = useTranslation();
   return (
     <Box sx={{ minWidth: 240 }}>
       <List disablePadding>
         {favors?.map((fav) => (
-          <ListItem key={fav.favor} disablePadding sx={{ mb: 1 }}>
+          <ListItem key={t(fav.favor)} disablePadding sx={{ mb: 1 }}>
             <ListItemButton
               sx={{
                 borderRadius: 2,
@@ -25,12 +27,7 @@ const Menu = ({ favors }) => {
                 "&:hover": { bgcolor: "rgba(255, 255, 255, 0.05)" },
               }}
             >
-              <ListItemText
-                primary={fav.favor}
-                primaryTypographyProps={{
-                  fontSize: "1.1rem",
-                }}
-              />
+              <ListItemText primary={t(fav.favor)} />
 
               <Typography sx={{ color: "#930270", fontWeight: "bold" }}>
                 +
@@ -43,7 +40,7 @@ const Menu = ({ favors }) => {
         variant="h5"
         sx={{ color: "#fff", mt: 2, textTransform: "uppercase" }}
       >
-        Стрижка
+        {t("main.haircut")}
       </Typography>
     </Box>
   );

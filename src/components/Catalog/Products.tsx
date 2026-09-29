@@ -1,16 +1,30 @@
 import "./catalog.css";
 import { useState } from "react";
 import { ProdProps } from "./ProdProps";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import {
+  deleteProduct,
+  saveRedactProd,
+  redactProduct,
+} from "../../slices/ProductsSlice";
+import { addProdCart } from "../../slices/CartsSlice";
+import { addFav } from "../../slices/FavouriteSlice";
 
-const Products = ({
-  products,
-  onDelete,
-  onRedact,
-  add,
-  addFav,
-  idSel,
-  onSave,
-}: ProdProps) => {
+const Products = (
+  {
+    // products,
+    // onDelete,
+    // onRedact,
+    // add,
+    // addFav,
+    // idSel,
+    // onSave,
+  }: ProdProps,
+) => {
+  const [idSel, setId] = useState<number | null>(null);
+  const dispatch = useDispatch();
+  const products = useSelector((state: RootState) => state.catalProd.items);
   const [name, setName] = useState("");
   const [description, setdescription] = useState("");
   const [price, setPrice] = useState(0);
@@ -55,7 +69,8 @@ const Products = ({
             <>
               <span
                 onClick={() => {
-                  onDelete(product.id);
+                  // onDelete(product.id);
+                  dispatch(deleteProduct(product.id));
                 }}
                 style={{ cursor: "pointer" }}
               >
@@ -63,8 +78,11 @@ const Products = ({
               </span>
               <span
                 onClick={() => {
-                  onSave(idSel, name, description, price);
-                  onRedact(null);
+                  // onSave(idSel, name, description, price);
+                  // onRedact(null);
+                  dispatch(saveRedactProd({ idSel, name, description, price }));
+                  //
+                  setId(null);
                 }}
                 style={{ cursor: "pointer" }}
               >
@@ -75,7 +93,8 @@ const Products = ({
             <>
               <span
                 onClick={() => {
-                  onDelete(product.id);
+                  // onDelete(product.id);
+                  dispatch(deleteProduct(product.id));
                 }}
                 style={{ cursor: "pointer" }}
               >
@@ -83,7 +102,8 @@ const Products = ({
               </span>
               <span
                 onClick={() => {
-                  onRedact(product.id);
+                  // onRedact(product.id);
+                  setId(product.id);
                   setName(product.name_en);
                   setdescription(product.description_en);
                   setPrice(product.price);
@@ -94,7 +114,8 @@ const Products = ({
               </span>
               <span
                 onClick={(e) => {
-                  add(product);
+                  // add(product);
+                  dispatch(addProdCart(product));
                 }}
                 style={{ cursor: "pointer" }}
               >
@@ -102,7 +123,7 @@ const Products = ({
               </span>
               <span
                 onClick={(e) => {
-                  addFav(product);
+                  dispatch(addFav(product));
                 }}
                 style={{ cursor: "pointer" }}
               >

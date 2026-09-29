@@ -3,14 +3,22 @@ import { useState } from "react";
 import { Stack, Button, TextField, Select, MenuItem } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Product } from "./IProduct";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import {
+  sortPriceProduct,
+  sortRatingProduct,
+  findProduct,
+} from "../../slices/ProductsSlice";
 
-interface ButtProp {
-  OnsortRate: () => void;
-  OnSortCost: () => void;
-  OnFindName: (name: string) => void;
-}
+// interface ButtProp {
+//   OnsortRate: () => void;
+//   OnSortCost: () => void;
+//   OnFindName: (name: string) => void;
+// }
 
-const Butt = ({ OnsortRate, OnSortCost, OnFindName }: ButtProp) => {
+const Butt = () => {
+  const dispatch = useDispatch();
   const [value, setValue] = useState("sort");
 
   return (
@@ -33,7 +41,8 @@ const Butt = ({ OnsortRate, OnSortCost, OnFindName }: ButtProp) => {
         }}
         onChange={(e) => {
           const next = e.target.value;
-          OnFindName(next);
+          // OnFindName(next);
+          dispatch(findProduct(next));
         }}
       />
 
@@ -43,9 +52,10 @@ const Butt = ({ OnsortRate, OnSortCost, OnFindName }: ButtProp) => {
         onChange={(e) => {
           setValue(e.target.value);
           if (e.target.value == "price") {
-            OnSortCost();
+            // OnSortCost();
+            dispatch(sortPriceProduct());
           } else if (e.target.value == "rate") {
-            OnsortRate();
+            dispatch(sortRatingProduct());
           }
         }}
       >

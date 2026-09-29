@@ -10,6 +10,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Product } from "./components/Catalog/IProduct.js";
 import Cart from "./Pages/Cart.tsx";
 import Favour from "./Pages/Favourite.tsx";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme({
   typography: {
@@ -44,21 +45,20 @@ export interface Products {
 }
 const favors: FavorItem[] = [
   {
-    favor: "Стрижка",
-    description:
-      "Профессиональная стрижка волос любой сложности. Индивидуальный подбор формы.",
+    favor: "main.haircut",
+    description: "main.desc_haircut",
   },
   {
-    favor: "Укладка",
-    description: "Создание идеальной укладки для любого случая.",
+    favor: "main.styling",
+    description: "main.desc_styling",
   },
   {
-    favor: "Окрашивание",
-    description: "Профессиональное окрашивание премиальными красителями.",
+    favor: "main.coloring",
+    description: "main.desc_coloring",
   },
   {
-    favor: "Уход",
-    description: "Восстанавливающие процедуры для здоровья и красоты волос.",
+    favor: "main.care",
+    description: "main.desc_care",
   },
 ];
 
@@ -101,14 +101,8 @@ function App() {
               path="/catalog"
               element={<Catalog add={Add} addFav={AddFav} />}
             />
-            <Route
-              path="/cart"
-              element={<Cart products={products} OnDelete={Delete} />}
-            />
-            <Route
-              path="/favourite"
-              element={<Favour products={productsFav} OnDelete={Delete} />}
-            />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/favourite" element={<Favour />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </main>

@@ -1,4 +1,4 @@
-import { Products } from "../../App";
+import { Product } from "../Catalog/IProduct";
 import {
   Stack,
   Button,
@@ -7,8 +7,18 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setLoad, setError } from "../../slices/ProductsSlice";
+import { setCartProd, deleteProduct } from "../../slices/CartsSlice";
+import { deleteProductFav } from "../../slices/FavouriteSlice";
+import { RootState } from "../../store";
+export interface PropsCartFav {
+  products: Product[];
+}
 
-const CardProduct = ({ products, OnDelete }: Products) => {
+const CardProduct = ({ products }: PropsCartFav) => {
+  const dispatch = useDispatch();
   console.log(products);
   return products.map((product) => (
     <Card
@@ -69,7 +79,9 @@ const CardProduct = ({ products, OnDelete }: Products) => {
           size="small"
           sx={{ color: "#fff" }}
           onClick={(e) => {
-            OnDelete(product.id);
+            //
+            dispatch(deleteProduct(product.id));
+            dispatch(deleteProductFav(product.id));
           }}
         >
           🗑️

@@ -10,8 +10,10 @@ import {
   Button,
   Link as MuiLink,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const DescFavor = ({ favors }) => {
+  const { t, i18n } = useTranslation();
   return (
     <Paper
       elevation={1}
@@ -29,13 +31,13 @@ const DescFavor = ({ favors }) => {
           variant="h5"
           sx={{ textTransform: "uppercase", mb: 1, fontWeight: 600 }}
         >
-          {favors[0].favor}
+          {t(favors[0].favor)}
         </Typography>
         <Typography
           variant="body2"
           sx={{ color: "rgba(255, 255, 255, 0.6)", lineHeight: 1.6 }}
         >
-          {favors[0].description}
+          {t(favors[0].description)}
         </Typography>
       </Box>
 
@@ -47,7 +49,7 @@ const DescFavor = ({ favors }) => {
             alignItems: "center",
           }}
         >
-          <Typography variant="body1">Стрижка у стажёра</Typography>
+          <Typography variant="body1">{t("main.stach")}</Typography>
           <Chip
             label="999 ₽"
             sx={{
@@ -66,7 +68,7 @@ const DescFavor = ({ favors }) => {
             alignItems: "center",
           }}
         >
-          <Typography variant="body1">Стрижка у мастера</Typography>
+          <Typography variant="body1">{t("main.mast")}</Typography>
           <Chip
             label="1899 ₽"
             sx={{
@@ -85,7 +87,7 @@ const DescFavor = ({ favors }) => {
             alignItems: "center",
           }}
         >
-          <Typography variant="body1">Стрижка у профи</Typography>
+          <Typography variant="body1">{t("main.pro")}</Typography>
           <Chip
             label="2799 ₽"
             sx={{ bgcolor: "#930270", color: "#fff", fontWeight: "bold" }}
@@ -108,7 +110,7 @@ const DescFavor = ({ favors }) => {
           "&:hover": { bgcolor: "#930270", borderColor: "#930270" },
         }}
       >
-        Наши мастера
+        {t("main.masters_title")}
       </Button>
     </Paper>
   );

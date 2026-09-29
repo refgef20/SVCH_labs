@@ -3,8 +3,10 @@ import "../../index.css";
 import Menu from "./Menu";
 import DescFavor from "./DescFavor";
 import { Container, Box, Typography, Divider, CardMedia } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Favor = ({ favors }) => {
+  const { t, i18n } = useTranslation();
   return (
     <Box
       component="section"
@@ -16,7 +18,7 @@ const Favor = ({ favors }) => {
           variant="h3"
           sx={{ mb: 5, textTransform: "uppercase", fontFamily: "Vera Humana" }}
         >
-          Услуги и цены
+          {t("main.services_prices_title")}
         </Typography>
 
         <Box

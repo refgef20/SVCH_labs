@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import "../Header/header.css";
 import "../../index.css";
 import React, { Component } from "react";
+import { useTranslation } from "react-i18next";
+
 const Header = () => {
+  const { t, i18n } = useTranslation();
   return (
     <header>
       <div className="head">
@@ -27,6 +30,7 @@ const Header = () => {
                 cursor: "pointer",
                 fontSize: "13px",
               }}
+              onClick={(e) => i18n.changeLanguage("ru")}
             >
               RU
             </button>
@@ -40,6 +44,7 @@ const Header = () => {
                 cursor: "pointer",
                 fontSize: "13px",
               }}
+              onClick={(e) => i18n.changeLanguage("en")}
             >
               EN
             </button>
@@ -76,31 +81,23 @@ const Header = () => {
         </div>
         <ul className="navigation" id="menu-overlay">
           <li>
-            <a
-              className="navigation-item"
-              href="#favor"
-              data-i18n="header.services"
-            >
-              Услуги
+            <a className="navigation-item" href="#favor">
+              {t("header.services")}
             </a>
           </li>
           <li>
-            <a
-              className="navigation-item"
-              href="#master"
-              data-i18n="header.masters"
-            >
-              Мастера
+            <a className="navigation-item" href="#master">
+              {t("header.masters")}
             </a>
           </li>
           <li>
-            <Link className="navigation-item" to="/" data-i18n="header.reviews">
-              Отзывы
+            <Link className="navigation-item" to="/">
+              {t("header.reviews")}
             </Link>
           </li>
           <li>
             <Link className="navigation-item" to="/" data-i18n="header.main">
-              Главная
+              {t("header.main")}
             </Link>
           </li>
           <li>
@@ -109,7 +106,7 @@ const Header = () => {
               to="/cart"
               data-i18n="header.cart"
             >
-              Корзина
+              {t("header.cart")}
             </Link>
           </li>
           <li>
@@ -118,7 +115,7 @@ const Header = () => {
               to="/catalog"
               data-i18n="header.catalog"
             >
-              Каталог
+              {t("header.catalog")}
             </Link>
           </li>
           <li>
@@ -127,26 +124,25 @@ const Header = () => {
               to="/favourite"
               data-i18n="header.favorites"
             >
-              Избранное
+              {t("header.favorites")}
             </Link>
           </li>
           <li>
-            <Link className="navigation-item" to="/" data-i18n="header.history">
-              Заказы
+            <Link className="navigation-item" to="/">
+              {t("header.history")}
             </Link>
           </li>
           <li>
             <Link className="navigation-item" to="/" data-i18n="header.profile">
-              Мой кабинет
+              {t("header.profile")}
             </Link>
           </li>
           <li>
             <button
               className="navigation-item accessibility-open-btn"
               type="button"
-              data-i18n="header.accessibility"
             >
-              Версия для слабовидящих
+              {t("header.accessibility")}
             </button>
           </li>
           <li className="container-for-button">
@@ -156,7 +152,7 @@ const Header = () => {
               data-i18n="header.login"
             >
               {" "}
-              Войти
+              {t("header.login")}
             </button>
           </li>
         </ul>
