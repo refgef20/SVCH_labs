@@ -8,9 +8,7 @@ const ContInfo = ({ phone }) => {
   return (
     <div className="phone-address">
       <p className="address">{t("header.address")}</p>
-      <p className="phone-number" data-i18n="header.phone">
-        {phone}
-      </p>
+      <p className="phone-number">{t("header.phone")}</p>
     </div>
   );
 };

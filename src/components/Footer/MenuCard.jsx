@@ -1,43 +1,29 @@
 import "../Footer/footer.css";
 import "../../index.css";
 import React, { Component } from "react";
+import { useTranslation } from "react-i18next";
 
 const MenuCard = () => {
+  const { t, i18n } = useTranslation();
   return (
     <div className="cards-allInfo">
       <div className="menu-with-bitton">
         <div className="menu">
           <div className="punkt">
-            <p className="item-punkt1" data-i18n="footer.address_lbl">
-              Адрес
-            </p>
-            <p className="item-punkt2" data-i18n="header.address">
-              Москва, м. Парк Победы, Улица 1812 года, дом 1
-            </p>
+            <p className="item-punkt1">{t("footer.address_lbl")}</p>
+            <p className="item-punkt2">{t("header.address")}</p>
           </div>
           <div className="punkt">
-            <p className="item-punkt1" data-i18n="footer.phone_lbl">
-              Телефон
-            </p>
-            <p className="item-punkt2" data-i18n="header.phone">
-              +7 (995) 099-27-57
-            </p>
+            <p className="item-punkt1">{t("footer.phone_lbl")}</p>
+            <p className="item-punkt2">{t("header.phone")}</p>
           </div>
           <div className="punkt punkt1">
-            <p className="item-punkt1" data-i18n="footer.hours_lbl">
-              Время работы
-            </p>
-            <p className="item-punkt2" data-i18n="footer.hours_workdays">
-              пн-пт 7:00 - 23:00
-            </p>
-            <p className="item-punkt2" data-i18n="footer.hours_weekends">
-              сб-вс: 11:00 - 22:00
-            </p>
+            <p className="item-punkt1">{t("footer.hours_lb")}</p>
+            <p className="item-punkt2">{t("footer.hours_workdays")}</p>
+            <p className="item-punkt2">{t("footer.hours_weekends")}</p>
           </div>
           <div className="punkt">
-            <p className="item-punkt1" data-i18n="footer.socials_lbl">
-              соц. сети
-            </p>
+            <p className="item-punkt1">{t("footer.socials_lbl")}</p>
             <div className="social-media2">
               <p className="item-social2">in</p>
               <p className="item-social2">vk</p>
@@ -45,14 +31,10 @@ const MenuCard = () => {
             </div>
           </div>
         </div>
-        <button className="button-under-menu" data-i18n="main.write_btn">
-          Наши услуги
-        </button>
+        <button className="button-under-menu">{t("main.write_btn")}</button>
       </div>
       <div className="cards-navigation">
-        <p className="tittle-card" data-i18n="footer.map_title">
-          Карта
-        </p>
+        <p className="tittle-card">{t("footer.map_title")}</p>
         <iframe
           src="https://yandex.ru/map-widget/v1/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%201812%20%D0%B3%D0%BE%D0%B4%D0%B0%2C%20%D0%B4%D0%BE%D0%BC%201&z=16"
           width="100%"

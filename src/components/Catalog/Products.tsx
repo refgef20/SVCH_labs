@@ -10,18 +10,10 @@ import {
 } from "../../slices/ProductsSlice";
 import { addProdCart } from "../../slices/CartsSlice";
 import { addFav } from "../../slices/FavouriteSlice";
+import { useTranslation } from "react-i18next";
 
-const Products = (
-  {
-    // products,
-    // onDelete,
-    // onRedact,
-    // add,
-    // addFav,
-    // idSel,
-    // onSave,
-  }: ProdProps,
-) => {
+const Products = () => {
+  const { t, i18n } = useTranslation();
   const [idSel, setId] = useState<number | null>(null);
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.catalProd.items);

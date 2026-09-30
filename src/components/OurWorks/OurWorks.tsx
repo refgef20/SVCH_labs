@@ -1,20 +1,21 @@
 import "../OurWorks/ourWorks.css";
 import "../../index.css";
 import { WorkItem } from "../../App";
+import { useTranslation } from "react-i18next";
 
 interface Works {
   works: WorkItem[];
 }
 
 const OurWorks = ({ works }: Works) => {
+  const { t, i18n } = useTranslation();
   return (
     <section className="container-our-works">
       <div className="our-works">
-        <p className="tittle-works" data-i18n="main.our_works">
-          Наши Работы
-        </p>
-        <p className="inst" data-i18n="main.instagram_more">
-          - Больше работ у нас в<span className="highlight"> instagram</span>
+        <p className="tittle-works">{t("main.our_works")}</p>
+        <p className="inst">
+          {t("main.instagram_more")}
+          <span className="highlight"> instagram</span>
         </p>
         <div className="our-works-ex">
           {works.map((work) => (

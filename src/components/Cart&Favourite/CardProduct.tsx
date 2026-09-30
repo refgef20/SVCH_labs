@@ -13,6 +13,7 @@ import { setLoad, setError } from "../../slices/ProductsSlice";
 import { setCartProd, deleteProduct } from "../../slices/CartsSlice";
 import { deleteProductFav } from "../../slices/FavouriteSlice";
 import { RootState } from "../../store";
+import { useTranslation } from "react-i18next";
 export interface PropsCartFav {
   products: Product[];
 }
@@ -20,6 +21,7 @@ export interface PropsCartFav {
 const CardProduct = ({ products }: PropsCartFav) => {
   const dispatch = useDispatch();
   console.log(products);
+  const { t, i18n } = useTranslation();
   return products.map((product) => (
     <Card
       key={product.id}
@@ -45,7 +47,7 @@ const CardProduct = ({ products }: PropsCartFav) => {
           "&:hover": { bgcolor: "#50013e" },
         }}
       >
-        Купить
+        {i18n.language == "ru" ? "Купить" : "Buy"}
       </Button>
 
       <CardMedia
@@ -56,14 +58,16 @@ const CardProduct = ({ products }: PropsCartFav) => {
       />
 
       <Typography variant="h6" sx={{ mt: 2, fontWeight: 600 }}>
-        {product.name_en}
+        {i18n.language == "ru" ? product.name_ru : product.name_en}
       </Typography>
 
       <Typography
         variant="body2"
         sx={{ color: "rgba(255, 255, 255, 0.6)", my: 1 }}
       >
-        {product.description_en}
+        {i18n.language == "ru"
+          ? product.description_ru
+          : product.description_en}
       </Typography>
 
       <Stack

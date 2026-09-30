@@ -1,36 +1,28 @@
 import "../Product/Product.css";
 import "../../index.css";
+import { useTransition } from "react";
+import { useTranslation } from "react-i18next";
 
 const Product = () => {
+  const { t, i18n } = useTranslation();
   return (
     <section className="container-product">
       <div className="card-tin">
         <div className="card-product">
           <div className="product-buttons">
             <div className="product-name-description">
-              <p className="tittle-product" data-i18n="main.products">
-                Продукция
-              </p>
-              <p className="description-product" data-i18n="main.products_desc">
-                На сколько Вы готовы к переменам? Измените свой цвет волос за 15
-                мин! Тонирующая маска для волос Annetka.hair с кератином,
-                витамином Е, пчелиным воском изготавливается из органической
-                профессиональной продукции Insight и подбирается индивидуально.
-                Результат - идеально ровный цвет, гладкие, плотные и блестящие
-                волосы без утяжеления! Тонирующая маска для блондинок с
-                вариантами оттенков цвета блонд: пепельный, серебристый,
-                стальной, розовый.
-              </p>
+              <p className="tittle-product">{t("main.products")}</p>
+              <p className="description-product">{t("main.products_desc")}</p>
             </div>
             <div className="buttons-buy">
               <button
                 className="button-ozon item-buy"
                 data-i18n="main.buy_ozon"
               >
-                Купить на ozon
+                {t("main.buy_ozon")}
               </button>
-              <button className="button-wild item-buy" data-i18n="main.buy_wb">
-                купить на wildberries
+              <button className="button-wild item-buy">
+                {t("main.buy_wb")}
               </button>
             </div>
           </div>

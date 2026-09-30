@@ -10,6 +10,7 @@ import {
   sortRatingProduct,
   findProduct,
 } from "../../slices/ProductsSlice";
+import { useTranslation } from "react-i18next";
 
 // interface ButtProp {
 //   OnsortRate: () => void;
@@ -18,13 +19,14 @@ import {
 // }
 
 const Butt = () => {
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const [value, setValue] = useState("sort");
 
   return (
     <Stack sx={{ gap: "10px", flexDirection: "row" }}>
       <TextField
-        placeholder="Введите название"
+        placeholder={i18n.language == "ru" ? "Введите название" : "Input name"}
         sx={{
           "& .MuiInputBase-input": {
             color: "white",
@@ -60,10 +62,15 @@ const Butt = () => {
         }}
       >
         <MenuItem value="sort" disabled>
-          Сортировка
+          {i18n.language == "ru" ? "Сортировка" : "Sort"}
         </MenuItem>
-        <MenuItem value="price">По цене</MenuItem>
-        <MenuItem value="rate">По рейтингу</MenuItem>
+        <MenuItem value="price">
+          {" "}
+          {i18n.language == "ru" ? "По цене" : "On Cost"}
+        </MenuItem>
+        <MenuItem value="rate">
+          {i18n.language == "ru" ? "По рейтинг" : "On Rate"}
+        </MenuItem>
       </Select>
     </Stack>
   );
