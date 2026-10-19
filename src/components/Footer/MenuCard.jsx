@@ -18,7 +18,7 @@ const MenuCard = () => {
             <p className="item-punkt2">{t("header.phone")}</p>
           </div>
           <div className="punkt punkt1">
-            <p className="item-punkt1">{t("footer.hours_lb")}</p>
+            <p className="item-punkt1">{t("footer.hours_lbl")}</p>
             <p className="item-punkt2">{t("footer.hours_workdays")}</p>
             <p className="item-punkt2">{t("footer.hours_weekends")}</p>
           </div>

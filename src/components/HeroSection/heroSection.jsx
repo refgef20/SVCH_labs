@@ -6,7 +6,7 @@ const HeroSection = () => {
   return (
     <section id="woman">
       <Description tittle="Annetka.Hair" />
-      <ContInfo phone="+7 (955) 099-27-57" />
+      <ContInfo />
     </section>
   );
 };
