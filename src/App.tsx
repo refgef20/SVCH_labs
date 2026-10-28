@@ -22,7 +22,9 @@ export interface FavorItem {
   favor: string;
   description: string;
 }
-
+export interface Favors {
+  favors: FavorItem[];
+}
 export interface MasterItem {
   name: string;
   role: string;

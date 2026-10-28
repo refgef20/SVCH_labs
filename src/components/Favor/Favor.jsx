@@ -1,7 +1,7 @@
 import "./favor.css";
 import "../../index.css";
-import Menu from "./Menu";
-import DescFavor from "./DescFavor";
+import Menu from "./Menu.tsx";
+import DescFavor from "./DescFavor.tsx";
 import { Container, Box, Typography, Divider, CardMedia } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
