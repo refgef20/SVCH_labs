@@ -10,12 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { fetchСatFav, setActive } from "../../slices/FavorSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { setActive } from "../../slices/FavorSlice";
+import { useDispatch } from "react-redux";
 import { Favors } from "../../App";
 import { AppDispatch } from "../../store";
-import { fetchGet } from "../../slices/MasterSlise";
 
 const Menu = ({ favors }: Favors) => {
   const dispatch = useDispatch<AppDispatch>();

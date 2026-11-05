@@ -7,18 +7,14 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import { deleteFavourite, deleteProductFav } from "../../slices/FavouriteSlice";
-import { AppDispatch, RootState } from "../../store";
 import { useTranslation } from "react-i18next";
-import { Delget } from "../../slices/CartsSlice";
 
 export interface PropsCartFav {
   products: Product[];
+  deleteFavourite: (id: number) => Promise<void>;
 }
 
-const CardProductFav = ({ products }: PropsCartFav) => {
-  const dispatch = useDispatch<AppDispatch>();
+const CardProductFav = ({ products, deleteFavourite }: PropsCartFav) => {
 
   console.log(products);
   const { t, i18n } = useTranslation();
@@ -65,12 +61,8 @@ const CardProductFav = ({ products }: PropsCartFav) => {
         <IconButton
           size="small"
           sx={{ color: "#fff" }}
-          onClick={(e) => {
-            //
-            const userId = 1;
-            dispatch(
-              deleteFavourite({ id: product.id, userId: userId } as Delget),
-            );
+          onClick={() => {
+            deleteFavourite(product.id);
           }}
         >
           🗑️

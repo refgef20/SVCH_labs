@@ -2,54 +2,53 @@ import "./masters.css";
 import "../../index.css";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchMasters, fetchMastersBase } from "../../slices/MasterSlise";
-import { AppDispatch, RootState } from "../../store";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Master } from "./IMaster";
+import left from "../../assets/images/left.svg";
+import right from "../../assets/images/right.svg";
 
 const Masters = () => {
   const { t, i18n } = useTranslation();
-  const [masters, setMaster] = useState([]);
   const [selMaster, setSelmaster] = useState<Master>();
   const limit = 3;
   const [mastersGet, setMast] = useState<Master[]>([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    async function fetchMasters(page: number, limit: number) {
-      const masters = await axios.get(
-        `  http://localhost:5000/api/master?page=${page}&limit=${limit}`,
-      );
-      setMast(masters.data.rows);
+    const controller = new AbortController();
+    async function fetchMasters() {
+      try {
+        const masters = await axios.get("http://localhost:5000/api/master", {
+          params: { page, limit },
+          signal: controller.signal,
+        });
+        const pages = Math.ceil(masters.data.count / limit) || 1;
+        setTotalPages(pages);
+        if (page > pages) {
+          setPage(pages);
+          return;
+        }
+        setMast(masters.data.rows);
+      } catch (error) {
+        if (!axios.isCancel(error)) console.error(error);
+      }
     }
-    fetchMasters(page, limit);
-    async function MastersAll() {
-      const mastersG = await axios.get(`http://localhost:5000/api/master`);
-      setMaster(mastersG.data.rows);
-    }
-    MastersAll();
-    console.log(masters[0]);
-    console.log(mastersGet[0]);
+    fetchMasters();
+    return () => controller.abort();
   }, [page]);
 
   return (
     <section id="master" className="container-ourMaster">
       <div className="our-master">
-        <img
-          src="src/assets/images/left.svg"
-          alt="Назад"
+        <button
+          type="button"
+          aria-label="Назад"
           className="arrow-left"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            const totalPages = Math.ceil(masters.length / limit) || 1;
-
-            if (page <= 1) {
-              setPage(totalPages);
-            } else {
-              setPage(page - 1);
-            }
-          }}
-        />
+          disabled={totalPages <= 1}
+          onClick={() => setPage((prev) => (prev <= 1 ? totalPages : prev - 1))}
+        >
+          <img src={left} alt="" />
+        </button>
         <div className="master">
           <p className="tittle-master">{t("main.masters_title")}</p>
           <div className="cards-masters" id="masters-container">
@@ -59,9 +58,12 @@ const Masters = () => {
                   setSelmaster(master);
                 }}
                 key={master.id}
-                className="card"
+                className="card-master"
               >
-                <img src={master.photo} alt="" />
+                <img
+                  src={master.photo || undefined}
+                  alt={master.photo ? master.name : ""}
+                />
                 <div className="container-review-master">
                   <div className="review-master">
                     <div className="name-and-who">
@@ -91,21 +93,15 @@ const Masters = () => {
           </div>
           <div className="slider-dots"></div>
         </div>
-        <img
-          src="src\assets\images\right.svg"
-          alt="Вперед"
+        <button
+          type="button"
+          aria-label="Вперед"
           className="arrow-right"
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            const totalPages = Math.ceil(masters.length / limit) || 1;
-
-            if (page >= totalPages) {
-              setPage(1);
-            } else {
-              setPage(page + 1);
-            }
-          }}
-        />
+          disabled={totalPages <= 1}
+          onClick={() => setPage((prev) => (prev >= totalPages ? 1 : prev + 1))}
+        >
+          <img src={right} alt="" />
+        </button>
       </div>
       {selMaster && (
         <div className="modal-overlay" onClick={() => setSelmaster(undefined)}>

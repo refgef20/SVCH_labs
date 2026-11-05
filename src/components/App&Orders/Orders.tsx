@@ -1,6 +1,4 @@
-import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { AppDispatch, RootState } from "../../store";
 import { useEffect } from "react";
 import "./app&ord.css";
 import { UsProd } from "../Cart&Favourite/CardProduct";
@@ -8,7 +6,6 @@ import axios from "axios";
 
 const Orders = () => {
   const [orders, setOrders] = useState<UsProd[]>([]);
-  const dispatch = useDispatch<AppDispatch>();
   const userId = 1;
   useEffect(() => {
     async function getOrd() {

@@ -2,6 +2,7 @@ import "./favor.css";
 import "../../index.css";
 import {
   Paper,
+  TextField,
   Box,
   Stack,
   Typography,
@@ -10,37 +11,99 @@ import {
   Button,
   Link as MuiLink,
 } from "@mui/material";
-import { postAppoint } from "../../slices/AppointSlice";
-import { fetchGet } from "../../slices/MasterSlise";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useEffect, useState } from "react";
 import { Appointments } from "./IAppoints";
+import { Favor } from "./IFavor";
+import { Master } from "../Masters/IMaster";
 
 const DescFavor = () => {
   const userId = 1;
   const { t, i18n } = useTranslation();
-  const services = useSelector((state: RootState) => state.catalServ.favors);
-  const masters = useSelector((state: RootState) => state.catMast.mastersCat);
+  const [services, setServices] = useState<Favor[]>([]);
+  const [masters, setMasters] = useState<Master[]>([]);
   const activeCat = useSelector(
     (state: RootState) => state.catalServ.activeCat,
   );
   const [activeSign, setActive] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  console.log(services);
+  const [isLoad, setLoad] = useState(false);
   const [appoint, setAppoint] = useState<Appointments>({
     userId: userId,
+    clientName: "",
+    clientPhone: "",
     date: "",
     MasterId: NaN,
     FavorId: NaN,
     status: "создана",
   });
+  const serviceTitle = services.find(
+    (service) => service.id === appoint.FavorId,
+  )?.title;
+
+  useEffect(() => {
+    if (!activeCat) return;
+
+    setServices([]);
+    const controller = new AbortController();
+    async function getServices() {
+      try {
+        const res = await axios.get("http://localhost:5000/api/services", {
+          params: { search: activeCat },
+          signal: controller.signal,
+        });
+        setServices(res.data.rows);
+      } catch (error) {
+        if (!axios.isCancel(error)) console.error(error);
+      }
+    }
+    getServices();
+    return () => controller.abort();
+  }, [activeCat]);
+
+  useEffect(() => {
+    if (!activeSign || !serviceTitle) return;
+
+    const controller = new AbortController();
+    async function getMasters() {
+      try {
+        const res = await axios.get("http://localhost:5000/api/master", {
+          params: { search: serviceTitle },
+          signal: controller.signal,
+        });
+        setMasters(res.data.rows);
+      } catch (error) {
+        if (!axios.isCancel(error)) console.error(error);
+      }
+    }
+    getMasters();
+    return () => controller.abort();
+  }, [activeSign, serviceTitle]);
+
   function handleChange(name: string, value: string | number) {
     setAppoint((prev) => ({
       ...prev,
       [name]: value,
     }));
+  }
+
+  async function postAppoint() {
+    setLoad(true);
+    try {
+      await axios.post("http://localhost:5000/api/appointment", {
+        ...appoint,
+        ServiceId: appoint.FavorId,
+      });
+      alert("Запись успешно отправлена!");
+      setActive(false);
+    } catch (error) {
+      console.error(error);
+      alert("Не удалось отправить запись");
+    } finally {
+      setLoad(false);
+    }
   }
 
   return (
@@ -64,7 +127,7 @@ const DescFavor = () => {
         </Typography>
       </Box>
       {services?.map((service) => (
-        <Stack spacing={2} sx={{ mb: 4 }}>
+        <Stack key={service.id} spacing={2} sx={{ mb: 4 }}>
           <Box
             sx={{
               display: "flex",
@@ -87,10 +150,14 @@ const DescFavor = () => {
                   py: 0.5,
                   "&:hover": { bgcolor: "#930270", borderColor: "#930270" },
                 }}
-                onClick={(e) => {
+                onClick={() => {
+                  setMasters([]);
+                  setAppoint((prev) => ({
+                    ...prev,
+                    FavorId: service.id,
+                    MasterId: "",
+                  }));
                   setActive(true);
-                  handleChange("FavorId", service.id);
-                  dispatch(fetchGet(service.title));
                 }}
               >
                 {t("main.sign")}
@@ -240,14 +307,38 @@ const DescFavor = () => {
           <Stack
             component="form"
             spacing={2.5}
+            sx={{
+              "& .MuiInputBase-root": {
+                bgcolor: "#1a1a1a",
+                color: "#fff",
+              },
+              "& .MuiInputLabel-root": {
+                color: "rgba(255,255,255,0.7)",
+              },
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgba(255,255,255,0.15)",
+              },
+            }}
             onSubmit={(e) => {
               e.preventDefault();
-              dispatch(postAppoint(appoint));
-
-              alert("Запись успешно отправлена!");
-              setActive(false);
+              postAppoint();
             }}
           >
+            <TextField
+              label="Имя клиента"
+              name="clientName"
+              value={appoint.clientName}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+              required
+            />
+            <TextField
+              label="Телефон клиента"
+              name="clientPhone"
+              type="tel"
+              value={appoint.clientPhone}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+              required
+            />
             <Box>
               <Typography
                 variant="caption"
@@ -287,6 +378,7 @@ const DescFavor = () => {
               <Box
                 component="select"
                 required
+                value={appoint.MasterId}
                 onChange={(e) => handleChange("MasterId", e.target.value)}
                 sx={{
                   width: "100%",
@@ -304,7 +396,7 @@ const DescFavor = () => {
                   },
                 }}
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   -- Свободный мастер --
                 </option>
 
@@ -317,6 +409,7 @@ const DescFavor = () => {
             </Box>
             <Button
               type="submit"
+              disabled={isLoad}
               variant="contained"
               sx={{
                 bgcolor: "#fff",
