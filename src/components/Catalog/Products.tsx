@@ -38,7 +38,6 @@ const Products = () => {
   }
 
   useEffect(() => {
-
     console.log("Выводдти");
     async function getCat() {
       const res = await axios.get("http://localhost:5000/api/product");
@@ -53,7 +52,13 @@ const Products = () => {
     setProd(res.data.rows);
   }
   async function redactP({ idSel, name, description, price }: PropsRed) {
-
+    const resp = await axios.patch(
+      `http://localhost:5000/api/product/${idSel}`,
+      { name, description, price },
+    );
+    const res = await axios.get("http://localhost:5000/api/product");
+    setProd(res.data.rows);
+  }
   async function addCart(ProductId: number) {
     const res = await axios.post(`http://localhost:5000/api/cart`, {
       UserId,

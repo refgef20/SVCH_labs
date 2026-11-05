@@ -2,44 +2,54 @@ import "./masters.css";
 import "../../index.css";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { fetchMasters, fetchMastersBase } from "../../slices/MasterSlise";
+import { AppDispatch, RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Master } from "./IMaster";
-import left from "../../assets/images/left.svg";
-import right from "../../assets/images/right.svg";
 
 const Masters = () => {
   const { t, i18n } = useTranslation();
+  const [masters, setMaster] = useState([]);
   const [selMaster, setSelmaster] = useState<Master>();
   const limit = 3;
   const [mastersGet, setMast] = useState<Master[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    async function fetchMasters() {
-      const masters = await axios.get("http://localhost:5000/api/master", {
-        params: { page, limit },
-      });
-      const pages = Math.ceil(masters.data.count / limit) || 1;
-
-      setPage(pages);
-
+    async function fetchMasters(page: number, limit: number) {
+      const masters = await axios.get(
+        `  http://localhost:5000/api/master?page=${page}&limit=${limit}`,
+      );
       setMast(masters.data.rows);
     }
-    fetchMasters();
+    fetchMasters(page, limit);
+    async function MastersAll() {
+      const mastersG = await axios.get(`http://localhost:5000/api/master`);
+      setMaster(mastersG.data.rows);
+    }
+    MastersAll();
+    console.log(masters[0]);
+    console.log(mastersGet[0]);
   }, [page]);
 
   return (
     <section id="master" className="container-ourMaster">
       <div className="our-master">
-        <button
-          type="button"
-          aria-label="Назад"
+        <img
+          src="src/assets/images/left.svg"
+          alt="Назад"
           className="arrow-left"
-          disabled={totalPages <= 1}
-          onClick={() => setPage((prev) => (prev <= 1 ? totalPages : prev - 1))}
-        >
-          <img src={left} alt="" />
-        </button>
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            const totalPages = Math.ceil(masters.length / limit) || 1;
+
+            if (page <= 1) {
+              setPage(totalPages);
+            } else {
+              setPage(page - 1);
+            }
+          }}
+        />
         <div className="master">
           <p className="tittle-master">{t("main.masters_title")}</p>
           <div className="cards-masters" id="masters-container">
@@ -49,12 +59,9 @@ const Masters = () => {
                   setSelmaster(master);
                 }}
                 key={master.id}
-                className="card-master"
+                className="card"
               >
-                <img
-                  src={master.photo || undefined}
-                  alt={master.photo ? master.name : ""}
-                />
+                <img src={master.photo} alt="" />
                 <div className="container-review-master">
                   <div className="review-master">
                     <div className="name-and-who">
@@ -84,15 +91,21 @@ const Masters = () => {
           </div>
           <div className="slider-dots"></div>
         </div>
-        <button
-          type="button"
-          aria-label="Вперед"
+        <img
+          src="src\assets\images\right.svg"
+          alt="Вперед"
           className="arrow-right"
-          disabled={totalPages <= 1}
-          onClick={() => setPage((prev) => (prev >= totalPages ? 1 : prev + 1))}
-        >
-          <img src={right} alt="" />
-        </button>
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            const totalPages = Math.ceil(masters.length / limit) || 1;
+
+            if (page >= totalPages) {
+              setPage(1);
+            } else {
+              setPage(page + 1);
+            }
+          }}
+        />
       </div>
       {selMaster && (
         <div className="modal-overlay" onClick={() => setSelmaster(undefined)}>

@@ -15,9 +15,11 @@ import { Delget } from "../../slices/CartsSlice";
 
 export interface PropsCartFav {
   products: Product[];
+
+  deleteFav: (id: number) => Promise<void>;
 }
 
-const CardProductFav = ({ products }: PropsCartFav) => {
+const CardProductFav = ({ products, deleteFav }: PropsCartFav) => {
   const dispatch = useDispatch<AppDispatch>();
 
   console.log(products);
@@ -68,9 +70,8 @@ const CardProductFav = ({ products }: PropsCartFav) => {
           onClick={(e) => {
             //
             const userId = 1;
-            dispatch(
-              deleteFavourite({ id: product.id, userId: userId } as Delget),
-            );
+
+            deleteFav(product.id);
           }}
         >
           🗑️

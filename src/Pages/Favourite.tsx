@@ -12,6 +12,7 @@ import { Product } from "../components/Catalog/IProduct";
 const Favour = () => {
   const [products, setProd] = useState<Product[]>([]);
   const userId = 1;
+
   useEffect(() => {
     async function getFav() {
       const pr = await axios.get(
@@ -21,11 +22,17 @@ const Favour = () => {
     }
     getFav();
   }, []);
-
+  async function deleteFav(id: number) {
+    await axios.delete(`http://localhost:5000/api/favourite/${id}`);
+    const res = await axios.get(
+      `http://localhost:5000/api/user/${userId}/favourite`,
+    );
+    setProd(res.data.usersFavour);
+  }
   return (
     <Container content="section">
       <Stack direction="row" sx={{ gap: 10 }}>
-        <CardProductFav products={products} />
+        <CardProductFav products={products} deleteFav={deleteFav} />
       </Stack>
     </Container>
   );

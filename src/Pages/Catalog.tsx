@@ -1,8 +1,8 @@
 import { Catal } from "../App.js";
 import { Delete } from "@mui/icons-material";
-import Product from "../components/Catalog/Products";
+import Products from "../components/Catalog/Products.tsx";
 
 const Catalog = ({ add, addFav }: Catal) => {
-  return <Product />;
+  return <Products />;
 };
 export default Catalog;
