@@ -3,7 +3,6 @@ import CardProduct from "../components/Cart&Favourite/CardProduct";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { useEffect } from "react";
-import { fetchGet } from "../slices/FavouriteSlice";
 import CardProductFav from "../components/Cart&Favourite/CardProductFav";
 import { useState } from "react";
 import axios from "axios";

@@ -1,16 +1,10 @@
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import {
-  AppointmentsMastFav,
-  delApp,
-  getApp,
-  getAppsMastfav,
-} from "../../slices/AppointSlice";
+import { AppointmentsMastFav } from "../Favor/IAppoints";
 import { AppDispatch, RootState } from "../../store";
 import { useEffect } from "react";
 import "./app&ord.css";
 import axios from "axios";
-import { Delget } from "../../slices/CartsSlice";
 
 const Appoint = () => {
   const userId = 1;
@@ -26,7 +20,7 @@ const Appoint = () => {
     fetchGet();
   }, []);
 
-  async function delApp({ id, userId }: Delget) {
+  async function delApp({ id, userId }: { id: number; userId: number }) {
     const apps = await axios.delete(
       `http://localhost:5000/api/appointment/${id}`,
     );

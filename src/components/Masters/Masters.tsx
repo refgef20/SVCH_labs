@@ -2,7 +2,6 @@ import "./masters.css";
 import "../../index.css";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchMasters, fetchMastersBase } from "../../slices/MasterSlise";
 import { AppDispatch, RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";

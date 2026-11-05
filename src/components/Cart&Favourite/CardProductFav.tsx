@@ -8,10 +8,8 @@ import {
   IconButton,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteFavourite, deleteProductFav } from "../../slices/FavouriteSlice";
 import { AppDispatch, RootState } from "../../store";
 import { useTranslation } from "react-i18next";
-import { Delget } from "../../slices/CartsSlice";
 
 export interface PropsCartFav {
   products: Product[];
