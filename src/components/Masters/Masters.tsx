@@ -2,42 +2,58 @@ import "./masters.css";
 import "../../index.css";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { fetchMasters, fetchMastersBase } from "../../slices/MasterSlise";
+import { AppDispatch, RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { Master } from "./IMaster";
 
 const Masters = () => {
   const { t, i18n } = useTranslation();
-  const [index, setIndex] = useState(0);
   const [masters, setMaster] = useState([]);
-  const [selMaster, setSelmaster] = useState(null);
-
+  const [selMaster, setSelmaster] = useState<Master>();
+  const limit = 3;
+  const [mastersGet, setMast] = useState<Master[]>([]);
+  const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    async function fetchItem() {
-      await fetch("../src/back/db.json")
-        .then((res) => res.json())
-        .then((data) => setMaster(data.masters));
+    async function fetchMasters(page: number, limit: number) {
+      const masters = await axios.get(
+        `  http://localhost:5000/api/master?page=${page}&limit=${limit}`,
+      );
+      setMast(masters.data.rows);
     }
-    fetchItem();
-  }, []);
+    fetchMasters(page, limit);
+    async function MastersAll() {
+      const mastersG = await axios.get(`http://localhost:5000/api/master`);
+      setMaster(mastersG.data.rows);
+    }
+    MastersAll();
+    console.log(masters[0]);
+    console.log(mastersGet[0]);
+  }, [page]);
 
   return (
     <section id="master" className="container-ourMaster">
       <div className="our-master">
         <img
-          src="src\assets\images\left.svg"
+          src="src/assets/images/left.svg"
           alt="Назад"
           className="arrow-left"
           style={{ cursor: "pointer" }}
           onClick={() => {
-            if (index === 0) {
-              setIndex(masters.length - 3);
+            const totalPages = Math.ceil(masters.length / limit) || 1;
+
+            if (page <= 1) {
+              setPage(totalPages);
             } else {
-              setIndex(index - 1);
+              setPage(page - 1);
             }
           }}
         />
         <div className="master">
           <p className="tittle-master">{t("main.masters_title")}</p>
           <div className="cards-masters" id="masters-container">
-            {masters.slice(index, index + 3).map((master) => (
+            {mastersGet.map((master) => (
               <div
                 onClick={() => {
                   setSelmaster(master);
@@ -49,27 +65,13 @@ const Masters = () => {
                 <div className="container-review-master">
                   <div className="review-master">
                     <div className="name-and-who">
-                      <p className="name">
-                        {i18n.language == "ru"
-                          ? master.name_ru
-                          : master.name_en}
-                      </p>
+                      <p className="name">{master.name}</p>
                       <div className="who">
+                        <p className="item-who">{master.specialization}</p>
                         <p className="item-who">
-                          {i18n.language == "ru"
-                            ? master.specialty_ru
-                            : master.specialty_en}
+                          Опыт работы: {master.experience}
                         </p>
-                        <p className="item-who">
-                          {i18n.language == "ru"
-                            ? master.experience_ru[0]
-                            : master.experience_en[0]}
-                        </p>
-                        <p className="item-who">
-                          {i18n.language == "ru"
-                            ? master.experience_ru[1]
-                            : master.experience_en[1]}
-                        </p>
+
                         <p
                           className="item-who"
                           style={{
@@ -78,16 +80,10 @@ const Masters = () => {
                             fontWeight: "bold",
                           }}
                         >
-                          <span data-i18n="main_js.from">от</span>
-                          {master.price}
+                          {master.phone}
                         </p>
                       </div>
                     </div>
-                    <p className="qualification">
-                      {i18n.language == "ru"
-                        ? master.qualification_ru
-                        : master.qualification_en}
-                    </p>
                   </div>
                 </div>
               </div>
@@ -101,52 +97,42 @@ const Masters = () => {
           className="arrow-right"
           style={{ cursor: "pointer" }}
           onClick={() => {
-            if (index === masters.length - 3) {
-              setIndex(0);
+            const totalPages = Math.ceil(masters.length / limit) || 1;
+
+            if (page >= totalPages) {
+              setPage(1);
             } else {
-              setIndex(index + 1);
+              setPage(page + 1);
             }
           }}
         />
       </div>
       {selMaster && (
-        <div className="modal-overlay" onClick={() => setSelmaster(null)}>
+        <div className="modal-overlay" onClick={() => setSelmaster(undefined)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button
               className="modal-close-btn"
-              onClick={() => setSelmaster(null)}
+              onClick={() => setSelmaster(undefined)}
             >
               ✕
             </button>
 
             <img
               src={selMaster.photo}
-              alt={selMaster.name_ru}
+              alt={selMaster.name}
               className="modal-master-photo"
             />
 
             <div className="modal-master-info">
               <div className="modal-header-row">
-                <h3 className="modal-name">
-                  {i18n.language == "ru"
-                    ? selMaster.name_ru
-                    : selMaster.name_en}
-                </h3>
+                <h3 className="modal-name">{selMaster.name}</h3>
                 <span className="modal-rating">★ {selMaster.rating}</span>
               </div>
 
-              <p className="modal-qualification">
-                {i18n.language == "ru"
-                  ? selMaster.qualification_ru
-                  : selMaster.qualification_en}
-              </p>
-              <p className="modal-category">{selMaster.category}</p>
+              <p className="modal-qualification">{selMaster.qualification}</p>
+              <p className="modal-category">{selMaster.specialization}</p>
 
-              <p className="modal-description">
-                {i18n.language == "ru"
-                  ? selMaster.description_ru
-                  : selMaster.description_en}
-              </p>
+              <p className="modal-description">{selMaster.description}</p>
 
               <div className="modal-footer">
                 <span className="modal-price">

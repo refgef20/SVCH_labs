@@ -1,8 +1,8 @@
-import Menu from "../components/Catalog/MenuCatalog.jsx";
 import { Catal } from "../App.js";
 import { Delete } from "@mui/icons-material";
+import Product from "../components/Catalog/Products";
 
 const Catalog = ({ add, addFav }: Catal) => {
-  return <Menu add={add} addFav={addFav} />;
+  return <Product />;
 };
 export default Catalog;

@@ -18,7 +18,6 @@ import { AppDispatch } from "../../store";
 import { fetchGet } from "../../slices/MasterSlise";
 
 const Menu = ({ favors }: Favors) => {
-  const services = useSelector((state: RootState) => state.catalServ.favors);
   const dispatch = useDispatch<AppDispatch>();
   const { t, i18n } = useTranslation();
 
@@ -30,8 +29,6 @@ const Menu = ({ favors }: Favors) => {
             <ListItemButton
               onClick={() => {
                 dispatch(setActive(t(fav.favor)));
-                dispatch(fetchСatFav(t(fav.favor)));
-                dispatch(fetchGet(t(fav.favor)));
                 console.log(t(fav.favor));
               }}
               sx={{

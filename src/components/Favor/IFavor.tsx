@@ -1,7 +1,9 @@
 export interface Favor {
+  id: number;
   title: string;
-  category: string;
+
   price: number;
   duration: number;
   photo: string;
+  category: string;
 }

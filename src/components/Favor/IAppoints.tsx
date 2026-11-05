@@ -1,6 +1,7 @@
 export interface Appointments {
-  clientName: null | string;
-  clientPhone: null | string;
+  userId: number;
   date: string;
+  MasterId: number | string;
+  FavorId: number;
   status: string | "создана";
 }

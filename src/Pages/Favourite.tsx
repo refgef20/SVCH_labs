@@ -1,15 +1,31 @@
-import { Products } from "../App";
 import { Card, Stack, Container } from "@mui/material";
 import CardProduct from "../components/Cart&Favourite/CardProduct";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import { useEffect } from "react";
+import { fetchGet } from "../slices/FavouriteSlice";
+import CardProductFav from "../components/Cart&Favourite/CardProductFav";
+import { useState } from "react";
+import axios from "axios";
+import { Product } from "../components/Catalog/IProduct";
 
 const Favour = () => {
-  const products = useSelector((state: RootState) => state.favProd.items);
+  const [products, setProd] = useState<Product[]>([]);
+  const userId = 1;
+  useEffect(() => {
+    async function getFav() {
+      const pr = await axios.get(
+        `http://localhost:5000/api/user/${userId}/favourite`,
+      );
+      setProd(pr.data.usersFavour);
+    }
+    getFav();
+  }, []);
+
   return (
     <Container content="section">
       <Stack direction="row" sx={{ gap: 10 }}>
-        <CardProduct products={products} />
+        <CardProductFav products={products} />
       </Stack>
     </Container>
   );

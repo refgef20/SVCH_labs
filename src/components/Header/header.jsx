@@ -128,7 +128,7 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link className="navigation-item" to="/">
+            <Link className="navigation-item" to="/orders">
               {t("header.history")}
             </Link>
           </li>

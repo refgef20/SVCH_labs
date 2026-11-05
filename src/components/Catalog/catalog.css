@@ -64,10 +64,9 @@
 }
 .container-for-every-card-mets {
   display: flex;
-  width: 268px;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
-  gap: 35px;
+  gap: 55px;
 }
 .item-first-card-mets {
   margin: 0;

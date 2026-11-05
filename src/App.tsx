@@ -10,6 +10,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Product } from "./components/Catalog/IProduct.js";
 import Cart from "./Pages/Cart.tsx";
 import Favour from "./Pages/Favourite.tsx";
+import AppoinOrders from "./Pages/Appoints&Order.tsx";
 import { useTranslation } from "react-i18next";
 
 const theme = createTheme({
@@ -105,6 +106,7 @@ function App() {
             />
             <Route path="/cart" element={<Cart />} />
             <Route path="/favourite" element={<Favour />} />
+            <Route path="/orders" element={<AppoinOrders />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </main>

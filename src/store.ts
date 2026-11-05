@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
-  deleteProduct,
   redactProduct,
   sortPriceProduct,
   sortRatingProduct,
@@ -12,9 +11,13 @@ import FavouriteSlice from "./slices/FavouriteSlice";
 import { addProdCart } from "./slices/CartsSlice";
 import CatalFav from "./slices/FavorSlice";
 import MastersS from "./slices/MasterSlise";
+import AppointSlice from "./slices/AppointSlice";
+import OrderSlice from "./slices/OrderSlice";
 
 const Store = configureStore({
   reducer: {
+    catOrders: OrderSlice,
+    appCat: AppointSlice,
     catMast: MastersS,
     catalServ: CatalFav,
     catalProd: ProductSlice,

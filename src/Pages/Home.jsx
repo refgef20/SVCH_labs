@@ -1,6 +1,6 @@
 import HeroSection from "../components/HeroSection/heroSection.jsx";
 import Favor from "../components/Favor/Favor.jsx";
-import Masters from "../components/Masters/Masters.jsx";
+import Masters from "../components/Masters/Masters.tsx";
 import Reviews from "../components/Reviews/Reviews.jsx";
 import OurWorks from "../components/OurWorks/OurWorks.tsx";
 import Product from "../components/Product/Prod.jsx";

@@ -10,37 +10,39 @@ import {
   Button,
   Link as MuiLink,
 } from "@mui/material";
-import postAppoint from "../../slices/AppointSlice";
+import { postAppoint } from "../../slices/AppointSlice";
 import { fetchGet } from "../../slices/MasterSlise";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { AppDispatch, RootState } from "../../store";
 import { useState } from "react";
+import { Appointments } from "./IAppoints";
 
 const DescFavor = () => {
+  const userId = 1;
   const { t, i18n } = useTranslation();
   const services = useSelector((state: RootState) => state.catalServ.favors);
-  const masters = useSelector((state: RootState) => state.catMast.masters);
+  const masters = useSelector((state: RootState) => state.catMast.mastersCat);
   const activeCat = useSelector(
     (state: RootState) => state.catalServ.activeCat,
   );
-  const [selMastId, setSelmaster] = useState("");
   const [activeSign, setActive] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   console.log(services);
-  const [appoint, setAppoint] = useState({
-    clientName: "",
-    clientPhone: "",
-    data: "",
-    master: "",
-    favor: "",
+  const [appoint, setAppoint] = useState<Appointments>({
+    userId: userId,
+    date: "",
+    MasterId: NaN,
+    FavorId: NaN,
+    status: "создана",
   });
-  function handleChange(name: string, value: string) {
+  function handleChange(name: string, value: string | number) {
     setAppoint((prev) => ({
       ...prev,
       [name]: value,
     }));
   }
+
   return (
     <Paper
       elevation={1}
@@ -85,8 +87,10 @@ const DescFavor = () => {
                   py: 0.5,
                   "&:hover": { bgcolor: "#930270", borderColor: "#930270" },
                 }}
-                onClick={() => {
+                onClick={(e) => {
                   setActive(true);
+                  handleChange("FavorId", service.id);
+                  dispatch(fetchGet(service.title));
                 }}
               >
                 {t("main.sign")}
@@ -238,7 +242,7 @@ const DescFavor = () => {
             spacing={2.5}
             onSubmit={(e) => {
               e.preventDefault();
-              // dispatch(postAppoint(appoint));
+              dispatch(postAppoint(appoint));
 
               alert("Запись успешно отправлена!");
               setActive(false);
@@ -249,71 +253,12 @@ const DescFavor = () => {
                 variant="caption"
                 sx={{ color: "rgba(255,255,255,0.7)", display: "block", mb: 1 }}
               >
-                Ваше имя
-              </Typography>
-              <Box
-                component="input"
-                required
-                placeholder="Введите имя"
-                name="clientName"
-                value={appoint.clientName}
-                onChange={(e) => {
-                  handleChange(e.target.name, e.target.value);
-                }}
-                sx={{
-                  width: "100%",
-                  bgcolor: "#1a1a1a",
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  borderRadius: 2,
-                  p: 1.5,
-                  color: "#fff",
-                  outline: "none",
-                  "&:focus": { borderColor: "#930270" },
-                }}
-              />
-            </Box>
-
-            <Box>
-              <Typography
-                variant="caption"
-                sx={{ color: "rgba(255,255,255,0.7)", display: "block", mb: 1 }}
-              >
-                Номер телефона
-              </Typography>
-              <Box
-                value={appoint.clientPhone}
-                name="clientPhone"
-                component="input"
-                type="tel"
-                required
-                placeholder="+7 (___) ___-__-__"
-                onChange={(e) => {
-                  handleChange(e.target.name, e.target.value);
-                }}
-                sx={{
-                  width: "100%",
-                  bgcolor: "#1a1a1a",
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  borderRadius: 2,
-                  p: 1.5,
-                  color: "#fff",
-                  outline: "none",
-                  "&:focus": { borderColor: "#930270" },
-                }}
-              />
-            </Box>
-
-            <Box>
-              <Typography
-                variant="caption"
-                sx={{ color: "rgba(255,255,255,0.7)", display: "block", mb: 1 }}
-              >
                 Дата и время
               </Typography>
               <Box
-                value={appoint.data}
-                name="data"
                 component="input"
+                value={appoint.date || ""}
+                name="date"
                 type="datetime-local"
                 required
                 onChange={(e) => {
@@ -327,7 +272,7 @@ const DescFavor = () => {
                   p: 1.5,
                   color: "#fff",
                   outline: "none",
-                  colorScheme: "dark", // чтобы календарь в хроме был темным
+                  colorScheme: "dark",
                   "&:focus": { borderColor: "#930270" },
                 }}
               />
@@ -342,8 +287,7 @@ const DescFavor = () => {
               <Box
                 component="select"
                 required
-                value={selMastId}
-                onChange={(e) => setSelmaster(e.target.value)}
+                onChange={(e) => handleChange("MasterId", e.target.value)}
                 sx={{
                   width: "100%",
                   bgcolor: "#1a1a1a",
@@ -354,7 +298,6 @@ const DescFavor = () => {
                   outline: "none",
                   cursor: "pointer",
                   "&:focus": { borderColor: "#930270" },
-                  // Стилизуем выпадающие элементы внутри (опционально для темной темы)
                   "& option": {
                     bgcolor: "#1a1a1a",
                     color: "#fff",
