@@ -5,9 +5,6 @@ import { Stack, TextField, Select, MenuItem } from "@mui/material";
 import { useEffect } from "react";
 import { Product } from "./IProduct.tsx";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store";
-import { setSearch, setSort } from "../../slices/ProductsSlice";
 
 const Products = () => {
   const UserId = 1;
@@ -18,10 +15,21 @@ const Products = () => {
   const [price, setPrice] = useState(0);
   const [productsall, setProd] = useState<Product[]>([]);
 
-  const [reload, setReload] = useState(0);
-  const { search, sortBy } = useSelector((state: RootState) => state.catalProd);
-  const dispatch = useDispatch<AppDispatch>();
+  const [value, setValue] = useState("sort");
 
+  async function find(search: string) {
+    const products = await axios.get(
+      `http://localhost:5000/api/product?search=${search}`,
+    );
+    setProd(products.data.rows);
+  }
+  async function sort(sortOrder: string, sortBy: string) {
+    const products = await axios.get(
+      `http://localhost:5000/api/product?sortby=${sortBy}&sortOrder=${sortOrder}`,
+    );
+    console.log(products);
+    setProd(products.data.rows);
+  }
   interface PropsRed {
     idSel: number;
     name: string;
@@ -30,30 +38,22 @@ const Products = () => {
   }
 
   useEffect(() => {
+
+    console.log("Выводдти");
     async function getCat() {
-      const res = await axios.get("http://localhost:5000/api/product", {
-        params: {
-          search,
-          sortby: sortBy === "sort" ? "id" : sortBy,
-          sortOrder: "ASC",
-        },
-      });
+      const res = await axios.get("http://localhost:5000/api/product");
       setProd(res.data.rows);
+      console.log(res.data.rows);
     }
     getCat();
-  }, [search, sortBy, reload]);
+  }, []);
   async function deleteP(id: number) {
-    await axios.delete(`http://localhost:5000/api/product/${id}`);
-    setReload((prev) => prev + 1);
+    const resd = await axios.delete(`http://localhost:5000/api/product/${id}`);
+    const res = await axios.get("http://localhost:5000/api/product");
+    setProd(res.data.rows);
   }
   async function redactP({ idSel, name, description, price }: PropsRed) {
-    await axios.patch(`http://localhost:5000/api/product/${idSel}`, {
-      name,
-      description,
-      price,
-    });
-    setReload((prev) => prev + 1);
-  }
+
   async function addCart(ProductId: number) {
     const res = await axios.post(`http://localhost:5000/api/cart`, {
       UserId,
@@ -91,18 +91,32 @@ const Products = () => {
               borderRadius: "20px",
             },
           }}
-          value={search}
-          onChange={(e) => dispatch(setSearch(e.target.value))}
+          onChange={(e) => {
+            const next = e.target.value;
+
+            find(next);
+          }}
         />
 
         <Select
-          value={sortBy}
+          value={value}
           sx={{
             color: "white",
             border: "2px solid white",
             borderRadius: "20px",
           }}
-          onChange={(e) => dispatch(setSort(e.target.value))}
+          onChange={(e) => {
+            setValue(e.target.value);
+            if (e.target.value == "price") {
+              const sortOrder = "ASC";
+              const sortBy = e.target.value;
+              sort(sortOrder, sortBy);
+            } else if (e.target.value == "rating") {
+              const sortOrder = "ASC";
+              const sortBy = e.target.value;
+              sort(sortOrder, sortBy);
+            }
+          }}
         >
           <MenuItem value="sort" disabled>
             {i18n.language == "ru" ? "Сортировка" : "Sort"}

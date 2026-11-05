@@ -15,26 +15,17 @@ const Masters = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState<number>(1);
   useEffect(() => {
-    const controller = new AbortController();
     async function fetchMasters() {
-      try {
-        const masters = await axios.get("http://localhost:5000/api/master", {
-          params: { page, limit },
-          signal: controller.signal,
-        });
-        const pages = Math.ceil(masters.data.count / limit) || 1;
-        setTotalPages(pages);
-        if (page > pages) {
-          setPage(pages);
-          return;
-        }
-        setMast(masters.data.rows);
-      } catch (error) {
-        if (!axios.isCancel(error)) console.error(error);
-      }
+      const masters = await axios.get("http://localhost:5000/api/master", {
+        params: { page, limit },
+      });
+      const pages = Math.ceil(masters.data.count / limit) || 1;
+
+      setPage(pages);
+
+      setMast(masters.data.rows);
     }
     fetchMasters();
-    return () => controller.abort();
   }, [page]);
 
   return (
