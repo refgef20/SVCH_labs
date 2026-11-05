@@ -30,34 +30,28 @@ const Products = () => {
   }
 
   useEffect(() => {
-    const controller = new AbortController();
     async function getCat() {
-      try {
-        const res = await axios.get("http://localhost:5000/api/product", {
-          params: {
-            search,
-            sortby: sortBy === "sort" ? "id" : sortBy,
-            sortOrder: "ASC",
-          },
-          signal: controller.signal,
-        });
-        setProd(res.data.rows);
-      } catch (error) {
-        if (!axios.isCancel(error)) console.error(error);
-      }
+      const res = await axios.get("http://localhost:5000/api/product", {
+        params: {
+          search,
+          sortby: sortBy === "sort" ? "id" : sortBy,
+          sortOrder: "ASC",
+        },
+      });
+      setProd(res.data.rows);
     }
     getCat();
-    return () => controller.abort();
   }, [search, sortBy, reload]);
   async function deleteP(id: number) {
     await axios.delete(`http://localhost:5000/api/product/${id}`);
     setReload((prev) => prev + 1);
   }
   async function redactP({ idSel, name, description, price }: PropsRed) {
-    await axios.patch(
-      `http://localhost:5000/api/product/${idSel}`,
-      { name, description, price },
-    );
+    await axios.patch(`http://localhost:5000/api/product/${idSel}`, {
+      name,
+      description,
+      price,
+    });
     setReload((prev) => prev + 1);
   }
   async function addCart(ProductId: number) {

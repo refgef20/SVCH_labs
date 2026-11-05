@@ -47,39 +47,25 @@ const DescFavor = () => {
     if (!activeCat) return;
 
     setServices([]);
-    const controller = new AbortController();
     async function getServices() {
-      try {
-        const res = await axios.get("http://localhost:5000/api/services", {
-          params: { search: activeCat },
-          signal: controller.signal,
-        });
-        setServices(res.data.rows);
-      } catch (error) {
-        if (!axios.isCancel(error)) console.error(error);
-      }
+      const res = await axios.get("http://localhost:5000/api/services", {
+        params: { search: activeCat },
+      });
+      setServices(res.data.rows);
     }
     getServices();
-    return () => controller.abort();
   }, [activeCat]);
 
   useEffect(() => {
     if (!activeSign || !serviceTitle) return;
 
-    const controller = new AbortController();
     async function getMasters() {
-      try {
-        const res = await axios.get("http://localhost:5000/api/master", {
-          params: { search: serviceTitle },
-          signal: controller.signal,
-        });
-        setMasters(res.data.rows);
-      } catch (error) {
-        if (!axios.isCancel(error)) console.error(error);
-      }
+      const res = await axios.get("http://localhost:5000/api/master", {
+        params: { search: serviceTitle },
+      });
+      setMasters(res.data.rows);
     }
     getMasters();
-    return () => controller.abort();
   }, [activeSign, serviceTitle]);
 
   function handleChange(name: string, value: string | number) {
