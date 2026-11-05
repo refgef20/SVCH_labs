@@ -10,7 +10,12 @@ import {
   IconButton,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { AppDispatch, RootState } from "../../store";
 import { useTranslation } from "react-i18next";
+import { deleteCart } from "../../slices/CartsSlice";
+import { Delget } from "../../slices/CartsSlice";
+import { postOrder } from "../../slices/OrderSlice";
+import { Orders } from "../../slices/OrderSlice";
 import axios from "axios";
 
 export interface PropsCartFav {
@@ -26,7 +31,7 @@ export interface UsProd {
   category: string;
   rating: number;
   photo: string;
-  Order: Order & { id: number };
+  Order: Orders;
 }
 export interface Order {
   amount: number;
