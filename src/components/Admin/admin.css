@@ -1,0 +1,57 @@
+.admin-panel {
+  padding: 60px var(--pad-container);
+  font-family: var(--font-family-body);
+}
+.admin-panel > .profile-main {
+  width: 100%;
+  max-width: 1100px;
+  min-width: 0;
+}
+.admin-panel .admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+.admin-panel .admin-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border-translucent);
+  overflow-wrap: anywhere;
+}
+.admin-panel .admin-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.admin-panel .auth-input {
+  width: 100%;
+  min-width: 0;
+}
+.admin-panel button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.admin-panel [role="alert"] {
+  color: #ffb4b4;
+  margin-bottom: 16px;
+}
+.admin-panel [role="status"] {
+  margin: 16px 0;
+}
+.admin-panel h4 {
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) {
+  .admin-panel .profile-section {
+    padding: 20px;
+  }
+  .admin-panel .admin-actions {
+    width: 100%;
+  }
+}

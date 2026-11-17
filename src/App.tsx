@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import Authoriz from "./Pages/Authorization.tsx";
 import Registration from "./Pages/Registration.tsx";
 import Prof from "./Pages/Profile.tsx";
+import Admin from "./Pages/Admin.tsx";
 
 const theme = createTheme({
   typography: {
@@ -114,6 +115,7 @@ function App() {
             <Route path="/authorization" element={<Authoriz />}></Route>
             <Route path="/registration" element={<Registration />}></Route>
             <Route path="/profile" element={<Prof />}></Route>
+            <Route path="/admin" element={<Admin />}></Route>
           </Routes>
         </main>
         <Footer />

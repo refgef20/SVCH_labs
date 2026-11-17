@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import axios from "axios";
 import { changeToken } from "../../slices/UserSlice";
+import AdminLink from "../Admin/AdminLink";
 
 const Header = () => {
   const tok = useSelector((state: RootState) => state.user.accessToken);
@@ -185,6 +186,7 @@ const Header = () => {
             )}
           </li>
 
+          <AdminLink />
           <li className="container-for-button">
             {tok && (
               <button

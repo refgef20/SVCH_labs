@@ -1,16 +1,64 @@
-# React + Vite
+# Админ-панель Annetka.Hair
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Новая страница доступна по адресу `/admin`. После входа с ролью `admin` в шапке появляется ссылка «Админ панель». Гость перенаправляется на авторизацию, пользователь с другой ролью — на главную.
 
-Currently, two official plugins are available:
+## Возможности
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Просмотр пользователей, изменение ролей `user` и `admin`, удаление аккаунтов с подтверждением.
+- Создание товаров с названием, описанием, категорией, фото, ценой и рейтингом.
+- Создание, редактирование и удаление услуг с названием, категорией, ценой, длительностью и фото.
+- Просмотр услуг по 10 записей на странице. После удаления последней записи на странице открывается предыдущая доступная страница.
 
-## React Compiler
+Если администратор меняет свою роль на пользовательскую, панель закрывается. После удаления своего аккаунта локальный access-токен очищается и открывается авторизация.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Как устроен код
 
-## Expanding the ESLint configuration
+Сохранён подход существующих компонентов профиля и каталога. Страницы в `src/Pages` подключают компоненты. Данные форм и списков хранятся в локальном `useState`. Запросы выполняются через `axios` внутри компонентов. Redux предоставляет существующий access-токен.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Файл | Назначение |
+| --- | --- |
+| `src/Pages/Admin.tsx` | Страница-обёртка |
+| `src/components/Admin/AdminPanel.tsx` | Получение текущего пользователя через `GET /api/user`, проверка доступа и подключение разделов |
+| `src/components/Admin/AdminLink.tsx` | Ссылка в шапке для администратора, проверка роли при смене токена и переходах |
+| `src/components/Admin/AdminUsers.tsx` | Список аккаунтов, изменение ролей и удаление |
+| `src/components/Admin/AdminProducts.tsx` | Форма создания товара |
+| `src/components/Admin/AdminServices.tsx` | Форма создания и редактирования услуг, список и удаление |
+| `src/components/Admin/admin.css` | Стили только внутри `.admin-panel` |
+| `src/App.tsx` | Подключён маршрут `/admin` |
+| `src/components/Header/header.tsx` | Подключён `AdminLink` |
+
+Используются готовые классы `profile-container`, `profile-main`, `profile-section`, `profile-form`, `auth-field`, `auth-label`, `auth-input`, `auth-button` и переменные цветов и шрифтов из оформления профиля и авторизации.
+
+При ошибке токена 422 операции панели вызывают готовую функцию `upTok`, сохраняют новый токен через `changeToken` и повторяют запрос один раз. Во время сохранения кнопки соответствующего раздела блокируются. Ошибки показываются в разделе, введённые данные сохраняются при неуспешном запросе.
+
+## Запросы панели
+
+| Метод и маршрут | Назначение |
+| --- | --- |
+| `GET /api/user` | Текущий пользователь и роль |
+| `GET /api/admin/users` | Список аккаунтов |
+| `PATCH /api/admin/users/:id/role` | Изменение роли |
+| `DELETE /api/admin/users/:id` | Удаление аккаунта |
+| `POST /api/product` | Создание товара через готовый контроллер |
+| `GET /api/services?page=1&limit=10` | Получение услуг |
+| `POST /api/services` | Создание услуги через готовый контроллер |
+| `PATCH /api/services/:id` | Изменение услуги через готовый контроллер |
+| `DELETE /api/services/:id` | Удаление услуги через готовый контроллер |
+
+Защищённые запросы передают `Authorization: Bearer <token>` и `withCredentials: true`. Проверка прав выполняется также на сервере. Роли берутся из существующей модели пользователя.
+
+## Запуск
+
+1. Обновить и запустить бэкенд из `refgef20/server`. Изменения серверной части описаны в его README.
+2. Выполнить `npm ci` и `npm run dev` в этом репозитории.
+3. Открыть `http://localhost:5173`, войти под существующим администратором и перейти в «Админ панель».
+
+Поля товара следуют ограничениям модели. Цена от 0 до 1 000 000, рейтинг от 0 до 5, фото задаётся URL. Услуга требует длительность не менее 15 минут, неотрицательную цену и URL фото. Категория вводится в том же виде, в котором она используется существующим фильтром услуг.
+
+## Проверка изменений
+
+Выполнены `npx --no-install tsc --pretty false` и `npm run build`. Сборка сохраняет существующие предупреждения о старых путях ресурсов и размере общего JS-файла.
+
+В браузере проверены доступ гостя и пользователя, ссылка администратора, изменение ролей, удаление аккаунта, создание товара с обновлением токена, сохранение введённых данных при ошибке, создание, редактирование и удаление услуги, пагинация и отображение на настольной и мобильной ширине.
+
+Браузерная проверка обращалась к настоящим контроллерам и middleware в отдельном тестовом сервере. Вместо PostgreSQL и Redis использовались данные в памяти, валидация выполнялась настоящими моделями Sequelize. Рабочая БД не использовалась.
