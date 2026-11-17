@@ -13,16 +13,7 @@ const AppoinOrders = () => {
         color: "#fff",
       }}
     >
-      <h2
-      // style={{
-      //   textTransform: "uppercase",
-      //   marginBottom: "30px",
-      //   fontWeight: "600",
-      //   letterSpacing: "1px",
-      // }}
-      >
-        Мои записи и заказы
-      </h2>
+      <h2>Мои записи и заказы</h2>
       <Appoint />
       <Orders />
     </div>

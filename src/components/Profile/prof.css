@@ -1,0 +1,244 @@
+:root {
+  --gap-haircut: 5.25rem;
+  --gap-styling: 5.94rem;
+  --gap-dye: 2.06rem;
+  --gap-care: 7.75rem;
+  --gap-master: clamp(16.6rem, 34vw, 24.44rem);
+  --gap-profi: clamp(17.25rem, 38vw, 25.17rem);
+  --gap-time-work: 0.9125rem;
+  --gap-contact: 0.91375rem;
+  --gap-revmast: 2.575rem;
+  --haircut: var(--gap-haircut);
+  --styling: var(--gap-styling);
+  --dye: var(--gap-dye);
+  --care: var(--gap-care);
+  --master: var(--gap-master);
+  --profi: var(--gap-profi);
+  --time-work: var(--gap-time-work);
+  --contact: var(--gap-contact);
+  --revmast: var(--gap-revmast);
+
+  --color-bg-deep: #010101;
+  --color-bg-card: #111111;
+  --color-bg-black: #000000;
+  --color-white: #ffffff;
+  --color-accent: #71165b;
+  --color-accent-shadow: rgba(113, 22, 92, 0.3);
+  --color-border-haircut: #727272;
+  --color-border-translucent: rgba(255, 255, 255, 0.08);
+  --color-border-map: rgba(255, 255, 255, 0.1);
+
+  --color-brand-ozon: #1b1bf8;
+  --color-brand-wb-start: #cb11ab;
+  --color-brand-wb-end: #5f2a87;
+  --a11y-font-ratio: 1;
+}
+
+@font-face {
+  font-family: "Vera Humana";
+  src: url(../../assets/fonts/verahumana95.ttf) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Circe";
+  src: url(../../assets/fonts/CirceRounded-Regular.ttf) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+button {
+  background-color: transparent;
+  border: 1px solid var(--color-white);
+  color: var(--color-white);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-family-body);
+  font-weight: 500;
+}
+
+button:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+h2 {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  font-family: "Vera Humana";
+}
+.profile-container {
+  background-color: var(--color-bg-deep);
+  padding: var(--pad-container);
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.profile-title {
+  color: var(--color-white);
+  text-align: center;
+}
+
+.info-block {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border-translucent);
+  color: var(--color-text-gray);
+  font-family: var(--font-family-body);
+}
+
+.section-title {
+  color: var(--color-white);
+  font-family: var(--font-family-body);
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-container {
+  display: flex;
+  gap: 40px;
+  padding: 60px var(--pad-container);
+  background-color: var(--color-bg-deep);
+  color: var(--color-white);
+  min-height: 80vh;
+}
+
+.profile-sidebar {
+  flex: 0 0 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-family: var(--font-family-title);
+  margin-bottom: 20px;
+}
+
+.profile-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.profile-section {
+  background-color: var(--color-bg-card);
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border-dark);
+}
+
+.section-title {
+  margin-bottom: 20px;
+  font-family: var(--font-family-body);
+}
+
+.profile-container {
+  display: flex;
+  gap: 40px;
+  padding: 60px var(--pad-container);
+  background-color: var(--color-bg-deep);
+  color: var(--color-white);
+  min-height: 80vh;
+}
+
+.profile-sidebar {
+  flex: 0 0 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  background-color: var(--color-accent);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-family: var(--font-family-title);
+  margin-bottom: 20px;
+  color: var(--color-white);
+}
+
+.user-name {
+  font-family: var(--font-family-title);
+  margin-bottom: 10px;
+}
+
+.user-phone {
+  color: var(--color-text-gray);
+  font-family: var(--font-family-body);
+}
+
+.profile-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.profile-section {
+  background-color: var(--color-bg-card);
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border-dark);
+}
+
+.section-title {
+  font-family: var(--font-family-body);
+  margin-bottom: 20px;
+  color: var(--color-white);
+  font-size: 1.25rem;
+  border-bottom: 1px solid var(--color-border-translucent);
+  padding-bottom: 10px;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

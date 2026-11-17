@@ -13,10 +13,13 @@ import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../store";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import upTok from "../../updateTokenFunc";
+import { changeToken } from "../../slices/UserSlice";
 
 export interface PropsCartFav {
   products: Product[];
-  deleteCart: (id: number) => Promise<void>;
+  deleteCart: (id: number, token: string) => Promise<void>;
 }
 
 export interface UsProd {
@@ -31,19 +34,19 @@ export interface UsProd {
 }
 export interface Order {
   amount: number;
-  UserId: number;
   ProductId: number;
   address: string;
 }
 
 const CardProduct = ({ products, deleteCart }: PropsCartFav) => {
+  const token = useSelector((state: RootState) => state.user.accessToken);
   const [buy, setBuy] = useState(false);
+  const dispatch = useDispatch();
 
   const { t, i18n } = useTranslation();
 
   const [order, setOrder] = useState<Order>({
     amount: 1,
-    UserId: 1,
     ProductId: NaN,
     address: "",
   });
@@ -54,9 +57,25 @@ const CardProduct = ({ products, deleteCart }: PropsCartFav) => {
     }));
   };
 
-  const postOrder = async (order: Order) => {
-    const ordr = await axios.post(`http://localhost:5000/api/order`, order);
-    return ordr.data;
+  const postOrder = async (order: Order, token: string) => {
+    try {
+      const ordr = await axios.post(`http://localhost:5000/api/order`, order, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+      return ordr.data;
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        console.log("Ошибка бека:", err);
+        if (err.status == 422) {
+          const newtok = await upTok();
+          dispatch(changeToken(newtok.token));
+          postOrder(order, newtok.token);
+        }
+      } else {
+        console.log("Oшибка сети:", err);
+      }
+    }
   };
   return (
     <>
@@ -123,7 +142,7 @@ const CardProduct = ({ products, deleteCart }: PropsCartFav) => {
               size="small"
               sx={{ color: "#fff" }}
               onClick={() => {
-                deleteCart(product.id);
+                deleteCart(product.id, token);
               }}
             >
               🗑️
@@ -182,7 +201,7 @@ const CardProduct = ({ products, deleteCart }: PropsCartFav) => {
             spacing={2.5}
             onSubmit={(e) => {
               e.preventDefault();
-              postOrder(order);
+              postOrder(order, token);
               alert("Запись успешно отправлена!");
               setBuy(false);
             }}

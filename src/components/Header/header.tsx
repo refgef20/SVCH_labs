@@ -1,10 +1,49 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../Header/header.css";
 import "../../index.css";
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import axios from "axios";
+import { changeToken } from "../../slices/UserSlice";
 
 const Header = () => {
+  const tok = useSelector((state: RootState) => state.user.accessToken);
+  const dispatch = useDispatch();
+  const navig = useNavigate();
+
+  async function logout(token: string) {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/logout",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        },
+      );
+      dispatch(changeToken(""));
+      navig("/authorization");
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        console.log("Ошибка от бэкенда:", err.response.data.message);
+        if (err.status == 422) {
+          const token = await axios.post(
+            `http://localhost:5000/api/auth/refresh`,
+            {},
+            {
+              withCredentials: true,
+            },
+          );
+          dispatch(changeToken(token.data));
+        }
+      } else {
+        console.log("Ошибка сети:", err.message);
+      }
+    }
+  }
+
   const { t, i18n } = useTranslation();
   return (
     <header>
@@ -90,24 +129,22 @@ const Header = () => {
               {t("header.masters")}
             </a>
           </li>
-          <li>
-            <Link className="navigation-item" to="/">
-              {t("header.reviews")}
-            </Link>
-          </li>
+
           <li>
             <Link className="navigation-item" to="/" data-i18n="header.main">
               {t("header.main")}
             </Link>
           </li>
           <li>
-            <Link
-              className="navigation-item"
-              to="/cart"
-              data-i18n="header.cart"
-            >
-              {t("header.cart")}
-            </Link>
+            {tok && (
+              <Link
+                className="navigation-item"
+                to="/cart"
+                data-i18n="header.cart"
+              >
+                {t("header.cart")}
+              </Link>
+            )}
           </li>
           <li>
             <Link
@@ -119,41 +156,51 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link
-              className="navigation-item"
-              to="/favourite"
-              data-i18n="header.favorites"
-            >
-              {t("header.favorites")}
-            </Link>
+            {tok && (
+              <Link
+                className="navigation-item"
+                to="/favourite"
+                data-i18n="header.favorites"
+              >
+                {t("header.favorites")}
+              </Link>
+            )}
           </li>
           <li>
-            <Link className="navigation-item" to="/orders">
-              {t("header.history")}
-            </Link>
+            {tok && (
+              <Link className="navigation-item" to="/orders">
+                {t("header.history")}
+              </Link>
+            )}
           </li>
           <li>
-            <Link className="navigation-item" to="/" data-i18n="header.profile">
-              {t("header.profile")}
-            </Link>
+            {tok && (
+              <Link
+                className="navigation-item"
+                to="/profile"
+                data-i18n="header.profile"
+              >
+                {t("header.profile")}
+              </Link>
+            )}
           </li>
-          <li>
-            <button
-              className="navigation-item accessibility-open-btn"
-              type="button"
-            >
-              {t("header.accessibility")}
-            </button>
-          </li>
+
           <li className="container-for-button">
-            <button
-              className="button-login"
-              id="login-nav-btn"
-              data-i18n="header.login"
-            >
-              {" "}
-              {t("header.login")}
-            </button>
+            {tok && (
+              <button
+                className="btn-link"
+                onClick={() => {
+                  logout(tok);
+                }}
+              >
+                {t("header.logout")}
+              </button>
+            )}
+            {!tok && (
+              <Link className="btn-link" to="/authorization">
+                {t("header.login")}
+              </Link>
+            )}
           </li>
         </ul>
       </div>

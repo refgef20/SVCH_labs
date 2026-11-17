@@ -1,31 +1,65 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { AppDispatch, RootState } from "../../store";
 import { useEffect } from "react";
 import "./app&ord.css";
 import { UsProd } from "../Cart&Favourite/CardProduct";
 import axios from "axios";
+import { changeToken } from "../../slices/UserSlice";
+import upTok from "../../updateTokenFunc";
 
 const Orders = () => {
   const [orders, setOrders] = useState<UsProd[]>([]);
   const dispatch = useDispatch<AppDispatch>();
-  const userId = 1;
+  const token = useSelector((state: RootState) => state.user.accessToken);
+
   useEffect(() => {
-    async function getOrd() {
-      const ords = await axios.get(
-        `http://localhost:5000/api/user/${userId}/order`,
-      );
-      const res = ords.data.userOrder;
-      setOrders(res);
+    async function getOrd(token: string) {
+      try {
+        const ords = await axios.get(`http://localhost:5000/api/user/order`, {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+        const res = ords.data.userOrder;
+        setOrders(res);
+      } catch (err: any) {
+        if (err.response && err.response.data) {
+          console.log("Ошибка от бэкенда:", err.response.data.message);
+          if (err.status == 422) {
+            const newtok = await upTok();
+            console.log("Токен в компоненте:", newtok);
+            dispatch(changeToken(newtok.token));
+            getOrd(newtok.token);
+          }
+        } else {
+          console.log("Ошибка сети:", err.message);
+        }
+      }
     }
-    getOrd();
+    getOrd(token);
   }, []);
-  async function deleteOrd(id: number) {
-    const orders = await axios.delete(`http://localhost:5000/api/order/${id}`);
-    const ords = await axios.get(
-      `http://localhost:5000/api/user/${userId}/order`,
-    );
-    setOrders(ords.data.userOrder);
+  async function deleteOrd(id: number, token: string) {
+    try {
+      const orders = await axios.delete(
+        `http://localhost:5000/api/order/${id}`,
+      );
+      const ords = await axios.get(`http://localhost:5000/api/user/order`, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+      setOrders(ords.data.userOrder);
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        console.log("Ошибка от бэкенда:", err.response.data.message);
+        if (err.status == 422) {
+          const newtok = await upTok();
+          console.log("Токен в компоненте:", newtok);
+          dispatch(changeToken(newtok.token));
+        }
+      } else {
+        console.log("Ошибка сети:", err.message);
+      }
+    }
   }
   console.log("Один элемент заказа:", orders[0]);
   return (
@@ -103,7 +137,7 @@ const Orders = () => {
               onClick={() => {
                 const id = order.Order?.id;
 
-                deleteOrd(id);
+                deleteOrd(id, token);
               }}
               className="btn-cancel"
             >

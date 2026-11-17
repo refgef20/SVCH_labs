@@ -1,0 +1,160 @@
+:root {
+  --color-bg-deep: #010101;
+  --color-bg-card: #111111;
+  --color-accent: #71165b;
+  --color-white: #ffffff;
+  --color-border-dark: #333333;
+  --color-text-gray: rgba(255, 255, 255, 0.6);
+
+  --font-family-title: "Vera Humana", sans-serif;
+  --font-family-body: "Circe", sans-serif;
+
+  --size-h1: clamp(2.5rem, 8vw, 6.875rem);
+  --size-h2: clamp(1.75rem, 4.5vw, 3.25rem);
+  --size-h3: clamp(1.05rem, 1.8vw, 1.125rem);
+  --size-body: clamp(0.9rem, 1.25vw, 1rem);
+
+  --pad-container: clamp(1rem, 5vw, 6.25rem);
+  --gap-large: clamp(1.5rem, 4vw, 3.5rem);
+  --gap-medium: clamp(1rem, 2vw, 2rem);
+  --gap-small: clamp(0.5rem, 1.2vw, 1rem);
+
+  --color-bg-tab: #222222;
+}
+
+@font-face {
+  font-family: "Vera Humana";
+  src: url("../../assets/fonts/verahumana95.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Circe";
+  src: url("../../assets/fonts/CirceRounded-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  background-color: var(--color-bg-deep);
+  padding: var(--pad-container);
+}
+
+.auth-card {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 16px;
+  padding: var(--gap-large);
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+.auth-title {
+  font-family: var(--font-family-body);
+  font-size: var(--size-h2);
+  color: var(--color-white);
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.auth-subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--size-body);
+  color: var(--color-text-gray);
+  margin-bottom: var(--gap-large);
+  text-align: center;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-medium);
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-label {
+  font-family: var(--font-family-body);
+  font-size: 0.85rem;
+  color: var(--color-text-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.auth-input {
+  background-color: var(--color-bg-tab);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--color-white);
+  font-family: var(--font-family-body);
+  font-size: var(--size-body);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.auth-input:focus {
+  border-color: var(--color-accent);
+}
+
+.auth-button {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-family: var(--font-family-body);
+  font-size: var(--size-body);
+  font-weight: bold;
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.1s ease;
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.auth-button:hover {
+  opacity: 0.9;
+}
+
+.auth-button:active {
+  transform: scale(0.98);
+}
+
+.auth-footer {
+  margin-top: var(--gap-medium);
+  text-align: center;
+}
+
+.auth-text-gray {
+  font-family: var(--font-family-body);
+  font-size: var(--size-body);
+  color: var(--color-text-gray);
+}
+
+.auth-link {
+  color: var(--color-white);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.auth-link:hover {
+  color: var(--color-accent);
+}

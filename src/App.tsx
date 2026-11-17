@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./components/Header/header.jsx";
+import Header from "./components/Header/header.tsx";
 import Catalog from "./Pages/Catalog.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import HomePage from "./Pages/Home.jsx";
@@ -12,6 +12,9 @@ import Cart from "./Pages/Cart.tsx";
 import Favour from "./Pages/Favourite.tsx";
 import AppoinOrders from "./Pages/Appoints&Order.tsx";
 import { useTranslation } from "react-i18next";
+import Authoriz from "./Pages/Authorization.tsx";
+import Registration from "./Pages/Registration.tsx";
+import Prof from "./Pages/Profile.tsx";
 
 const theme = createTheme({
   typography: {
@@ -108,6 +111,9 @@ function App() {
             <Route path="/favourite" element={<Favour />} />
             <Route path="/orders" element={<AppoinOrders />} />
             <Route path="*" element={<Error />} />
+            <Route path="/authorization" element={<Authoriz />}></Route>
+            <Route path="/registration" element={<Registration />}></Route>
+            <Route path="/profile" element={<Prof />}></Route>
           </Routes>
         </main>
         <Footer />

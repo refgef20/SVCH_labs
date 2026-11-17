@@ -5,15 +5,54 @@ import { Stack, TextField, Select, MenuItem } from "@mui/material";
 import { useEffect } from "react";
 import { Product } from "./IProduct.tsx";
 import axios from "axios";
+import { RootState } from "../../store.ts";
+import { useDispatch, useSelector } from "react-redux";
+import upTok from "../../updateTokenFunc.tsx";
+import { changeToken } from "../../slices/UserSlice.ts";
+import { UserOne } from "../Profile/Prof.tsx";
 
 const Products = () => {
-  const UserId = 1;
+  const tok = useSelector((state: RootState) => state.user.accessToken);
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const [idSel, setId] = useState<number>(NaN);
   const [name, setName] = useState("");
   const [description, setdescription] = useState("");
   const [price, setPrice] = useState(0);
   const [productsall, setProd] = useState<Product[]>([]);
+  const [user, setUser] = useState<UserOne>({
+    id: NaN,
+    clientName: "",
+    clientPhone: "",
+    password: "",
+    role: "user",
+  });
+
+  useEffect(() => {
+    async function getUser(token: string) {
+      try {
+        const res = await axios.get("http://localhost:5000/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+        setUser(res.data);
+      } catch (err: any) {
+        if (err.response && err.response.data) {
+          console.log("Ошибка бека:", err);
+          if (err.status == 422) {
+            const newtok = await upTok();
+            dispatch(changeToken(newtok.token));
+            getUser(newtok.token);
+          }
+        } else {
+          console.log("Oшибка сети:", err);
+        }
+      }
+    }
+    getUser(tok);
+  }, [dispatch]);
 
   const [value, setValue] = useState("sort");
 
@@ -46,32 +85,86 @@ const Products = () => {
     }
     getCat();
   }, []);
-  async function deleteP(id: number) {
-    const resd = await axios.delete(`http://localhost:5000/api/product/${id}`);
-    const res = await axios.get("http://localhost:5000/api/product");
-    setProd(res.data.rows);
+  async function deleteP(id: number, token: string) {
+    try {
+      const resd = await axios.delete(
+        `http://localhost:5000/api/product/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        },
+      );
+      const res = await axios.get("http://localhost:5000/api/product");
+      setProd(res.data.rows);
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        console.log("Оишбка бэка", err.response);
+        if (err.status == 403) {
+          alert("Нет полномочий на данное действие");
+        }
+        if (err.status == 422) {
+          const newTok = await upTok();
+          dispatch(changeToken(newTok.token));
+        }
+      } else {
+        console.log("Ошибка сети", err.message);
+      }
+    }
   }
-  async function redactP({ idSel, name, description, price }: PropsRed) {
-    const resp = await axios.patch(
-      `http://localhost:5000/api/product/${idSel}`,
-      { name, description, price },
-    );
-    const res = await axios.get("http://localhost:5000/api/product");
-    setProd(res.data.rows);
+  async function redactP(
+    { idSel, name, description, price }: PropsRed,
+    token: string,
+  ) {
+    try {
+      const resp = await axios.patch(
+        `http://localhost:5000/api/product/${idSel}`,
+        { name, description, price },
+        { headers: { Authorization: `Bearer ${tok}` }, withCredentials: true },
+      );
+      const res = await axios.get("http://localhost:5000/api/product");
+      setProd(res.data.rows);
+    } catch (err: any) {
+      if (err.response && err.response.data) {
+        console.log("Оишбка бэка", err.response);
+        if (err.status == 403) {
+          alert("Нет полномочий на данное действие");
+        }
+        if (err.status == 422) {
+          const newTok = await upTok();
+          dispatch(changeToken(newTok.token));
+        }
+      } else {
+        console.log("Ошибка сети", err.message);
+      }
+    }
   }
   async function addCart(ProductId: number) {
-    const res = await axios.post(`http://localhost:5000/api/cart`, {
-      UserId,
-      ProductId,
-    });
+    const res = await axios.post(
+      `http://localhost:5000/api/cart`,
+      {
+        ProductId,
+      },
+      {
+        headers: { Authorization: `Bearer ${tok}` },
+        withCredentials: true,
+      },
+    );
     console.log(res.data);
     return res.data;
   }
   async function addFavourite(ProductId: number) {
-    const res = await axios.post(`http://localhost:5000/api/favourite`, {
-      UserId,
-      ProductId,
-    });
+    const res = await axios.post(
+      `http://localhost:5000/api/favourite`,
+      {
+        ProductId,
+      },
+      {
+        headers: { Authorization: `Bearer ${tok}` },
+        withCredentials: true,
+      },
+    );
+    console.log(res.data);
+
     return res.data;
   }
 
@@ -178,7 +271,7 @@ const Products = () => {
                 <>
                   <span
                     onClick={() => {
-                      deleteP(product.id);
+                      deleteP(product.id, tok);
                     }}
                     style={{ cursor: "pointer" }}
                   >
@@ -186,7 +279,7 @@ const Products = () => {
                   </span>
                   <span
                     onClick={() => {
-                      redactP({ idSel, name, description, price });
+                      redactP({ idSel, name, description, price }, tok);
                       setId(NaN);
                     }}
                     style={{ cursor: "pointer" }}
@@ -196,25 +289,30 @@ const Products = () => {
                 </>
               ) : (
                 <>
-                  <span
-                    onClick={() => {
-                      deleteP(product.id);
-                    }}
-                    style={{ cursor: "pointer" }}
-                  >
-                    🗑️
-                  </span>
-                  <span
-                    onClick={() => {
-                      setId(product.id);
-                      setName(product.name);
-                      setdescription(product.description);
-                      setPrice(product.price);
-                    }}
-                    style={{ cursor: "pointer" }}
-                  >
-                    ✒️
-                  </span>
+                  {user.role === "admin" && (
+                    <span
+                      onClick={() => {
+                        deleteP(product.id, tok);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      🗑️
+                    </span>
+                  )}
+                  {user.role === "admin" && (
+                    <span
+                      onClick={() => {
+                        setId(product.id);
+                        setName(product.name);
+                        setdescription(product.description);
+                        setPrice(product.price);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      ✒️
+                    </span>
+                  )}
+
                   <span
                     onClick={(e) => {
                       addCart(product.id);

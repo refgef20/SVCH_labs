@@ -2,9 +2,6 @@ import { Master } from "../Masters/IMaster";
 import { Favor } from "./IFavor";
 
 export interface Appointments {
-  userId: number;
-  clientName: string;
-  clientPhone: string;
   date: string;
   MasterId: number | string;
   FavorId: number;
@@ -17,5 +14,4 @@ export interface AppointmentsMastFav {
   status: string | "создана";
   Master: Master;
   Favor: Favor;
-  userId: number;
 }

@@ -13,27 +13,27 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useEffect, useState } from "react";
 import { Appointments } from "./IAppoints";
 import { Favor } from "./IFavor";
 import { Master } from "../Masters/IMaster";
+import upTok from "../../updateTokenFunc";
+import { changeToken } from "../../slices/UserSlice";
 
 const DescFavor = () => {
-  const userId = 1;
+  const token = useSelector((state: RootState) => state.user.accessToken);
   const { t, i18n } = useTranslation();
   const [services, setServices] = useState<Favor[]>([]);
   const [masters, setMasters] = useState<Master[]>([]);
   const activeCat = useSelector(
     (state: RootState) => state.catalServ.activeCat,
   );
+  const dispatch = useDispatch();
   const [activeSign, setActive] = useState(false);
   const [isLoad, setLoad] = useState(false);
   const [appoint, setAppoint] = useState<Appointments>({
-    userId: userId,
-    clientName: "",
-    clientPhone: "",
     date: "",
     MasterId: NaN,
     FavorId: NaN,
@@ -75,18 +75,33 @@ const DescFavor = () => {
     }));
   }
 
-  async function postAppoint() {
+  async function postAppoint(token: string) {
     setLoad(true);
     try {
-      await axios.post("http://localhost:5000/api/appointment", {
-        ...appoint,
-        ServiceId: appoint.FavorId,
-      });
+      await axios.post(
+        "http://localhost:5000/api/appointment",
+        {
+          ...appoint,
+          ServiceId: appoint.FavorId,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        },
+      );
       alert("Запись успешно отправлена!");
       setActive(false);
-    } catch (error) {
-      console.error(error);
-      alert("Не удалось отправить запись");
+    } catch (error: any) {
+      // console.error(error);
+      // alert("Не удалось отправить запись");
+      if (error.response && error.response.data) {
+        console.error("Ошибка бека", error);
+        if (error.status == 422) {
+          const newtok = await upTok();
+          dispatch(changeToken(newtok.token));
+          postAppoint(newtok.token);
+        }
+      }
     } finally {
       setLoad(false);
     }
@@ -161,76 +176,6 @@ const DescFavor = () => {
           <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.08)" }} />
         </Stack>
       ))}
-      {/* <Box sx={{ mb: 4 }}>
-        <Typography
-          variant="h5"
-          sx={{ textTransform: "uppercase", mb: 1, fontWeight: 600 }}
-        >
-          {t(favors[0].favor)}
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{ color: "rgba(255, 255, 255, 0.6)", lineHeight: 1.6 }}
-        >
-          {t(favors[0].description)}
-        </Typography>
-      </Box> */}
-
-      {/* <Stack spacing={2} sx={{ mb: 4 }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="body1">{t("main.stach")}</Typography>
-          <Chip
-            label="999 ₽"
-            sx={{
-              bgcolor: "rgba(255, 255, 255, 0.1)",
-              color: "#fff",
-              fontWeight: "bold",
-            }}
-          />
-        </Box>
-        <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.08)" }} />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="body1">{t("main.mast")}</Typography>
-          <Chip
-            label="1899 ₽"
-            sx={{
-              bgcolor: "rgba(255, 255, 255, 0.1)",
-              color: "#fff",
-              fontWeight: "bold",
-            }}
-          />
-        </Box>
-        <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.08)" }} />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="body1">{t("main.pro")}</Typography>
-          <Chip
-            label="2799 ₽"
-            sx={{ bgcolor: "#930270", color: "#fff", fontWeight: "bold" }}
-          />
-        </Box>
-        <Divider sx={{ borderColor: "rgba(255, 255, 255, 0.08)" }} />
-      </Stack> */}
-
       <Button
         component={MuiLink}
         href="#master"
@@ -307,24 +252,9 @@ const DescFavor = () => {
             }}
             onSubmit={(e) => {
               e.preventDefault();
-              postAppoint();
+              postAppoint(token);
             }}
           >
-            <TextField
-              label="Имя клиента"
-              name="clientName"
-              value={appoint.clientName}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              required
-            />
-            <TextField
-              label="Телефон клиента"
-              name="clientPhone"
-              type="tel"
-              value={appoint.clientPhone}
-              onChange={(e) => handleChange(e.target.name, e.target.value)}
-              required
-            />
             <Box>
               <Typography
                 variant="caption"
