@@ -12,7 +12,7 @@ interface Pass {
   oldPass: string;
   newPass: string;
 }
-interface UserInfo {
+export interface UserInfo {
   clientName: string;
   clientPhone: string;
 }

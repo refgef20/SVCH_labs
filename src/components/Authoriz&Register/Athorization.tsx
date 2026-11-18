@@ -105,6 +105,12 @@ const Auth = () => {
               Зарегистрироваться
             </Link>
           </p>
+          <p className="auth-text-gray">
+            Забыли пароль?{" "}
+            <Link className="auth-link" to={"/loginWithOutPass"}>
+              Восстановить пароль
+            </Link>
+          </p>
         </div>
       </div>
     </div>

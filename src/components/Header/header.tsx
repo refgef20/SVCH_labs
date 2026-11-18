@@ -1,18 +1,52 @@
 import { Link, useNavigate } from "react-router-dom";
 import "../Header/header.css";
 import "../../index.css";
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import axios from "axios";
 import { changeToken } from "../../slices/UserSlice";
-import AdminLink from "../Admin/AdminLink";
+import upTok from "../../updateTokenFunc";
+import { UserOne } from "../Profile/Prof";
 
 const Header = () => {
+  const [user, setUser] = useState<UserOne>({
+    id: NaN,
+    clientName: "",
+    clientPhone: "",
+    password: "",
+    role: "user",
+  });
   const tok = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useDispatch();
   const navig = useNavigate();
+
+  useEffect(() => {
+    async function getUser(token: string) {
+      try {
+        const res = await axios.get("http://localhost:5000/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+        setUser(res.data);
+      } catch (err: any) {
+        if (err.response && err.response.data) {
+          console.log("Ошибка бека:", err);
+          if (err.status == 422) {
+            const newtok = await upTok();
+            dispatch(changeToken(newtok.token));
+            getUser(newtok.token);
+          }
+        } else {
+          console.log("Oшибка сети:", err);
+        }
+      }
+    }
+    getUser(tok);
+  }, [dispatch]);
 
   async function logout(token: string) {
     try {
@@ -185,8 +219,13 @@ const Header = () => {
               </Link>
             )}
           </li>
-
-          <AdminLink />
+          <li>
+            {tok && user.role === "admin" && (
+              <Link className="navigation-item" to="/admin">
+                Админ-панель
+              </Link>
+            )}
+          </li>
           <li className="container-for-button">
             {tok && (
               <button

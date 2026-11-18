@@ -16,6 +16,7 @@ import Authoriz from "./Pages/Authorization.tsx";
 import Registration from "./Pages/Registration.tsx";
 import Prof from "./Pages/Profile.tsx";
 import Admin from "./Pages/Admin.tsx";
+import LoginWithOutPass from "./Pages/LoginWithOutPass.tsx";
 
 const theme = createTheme({
   typography: {
@@ -114,6 +115,10 @@ function App() {
             <Route path="*" element={<Error />} />
             <Route path="/authorization" element={<Authoriz />}></Route>
             <Route path="/registration" element={<Registration />}></Route>
+            <Route
+              path="/loginWithOutPass"
+              element={<LoginWithOutPass />}
+            ></Route>
             <Route path="/profile" element={<Prof />}></Route>
             <Route path="/admin" element={<Admin />}></Route>
           </Routes>

@@ -14,6 +14,7 @@ const AdminUsers = ({ userId }: { userId: number }) => {
   const [users, setUsers] = useState<Omit<UserOne, "password">[]>([]);
   const [error, setError] = useState("");
   const [isLoad, setLoad] = useState(false);
+  const [regUs, setReg] = useState<Omit<UserOne, "password">[]>([]);
 
   async function getUsers(token: string, retry = true) {
     setLoad(true);
@@ -24,6 +25,7 @@ const AdminUsers = ({ userId }: { userId: number }) => {
         withCredentials: true,
       });
       setUsers(res.data);
+      setReg(users.filter((user) => user.role === "user"));
     } catch (err: any) {
       if (err.response?.status === 422 && retry) {
         const newtok = await upTok();
@@ -32,24 +34,38 @@ const AdminUsers = ({ userId }: { userId: number }) => {
           return getUsers(newtok.token, false);
         }
       }
-      setError(err.response?.data?.message || "Не удалось загрузить пользователей");
+      setError(
+        err.response?.data?.message || "Не удалось загрузить пользователей",
+      );
     } finally {
       setLoad(false);
     }
   }
 
-  useEffect(() => { getUsers(token); }, []);
+  useEffect(() => {
+    getUsers(token);
+  }, []);
 
-  async function changeRole(id: number, role: string, token: string, retry = true) {
+  async function changeRole(
+    id: number,
+    role: string,
+    token: string,
+    retry = true,
+  ) {
     setLoad(true);
     setError("");
     try {
       const res = await axios.patch(
         `http://localhost:5000/api/admin/users/${id}/role`,
         { role },
-        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        },
       );
-      setUsers((prev) => prev.map((user) => user.id === id ? res.data : user));
+      setUsers((prev) =>
+        prev.map((user) => (user.id === id ? res.data : user)),
+      );
       if (id === userId && role !== "admin") navig("/");
     } catch (err: any) {
       if (err.response?.status === 422 && retry) {
@@ -102,14 +118,16 @@ const AdminUsers = ({ userId }: { userId: number }) => {
       {isLoad && <p role="status">Загрузка...</p>}
       {!isLoad && !error && users.length === 0 && <p>Пользователей нет</p>}
       <div className="admin-list">
-        {users.map((user) => (
+        {regUs.map((user) => (
           <div className="admin-row" key={user.id}>
             <div>
               <p>{user.clientName}</p>
               <p className="user-phone">{user.clientPhone}</p>
             </div>
             <div className="admin-actions">
-              <label className="auth-label" htmlFor={`role-${user.id}`}>Роль</label>
+              <label className="auth-label" htmlFor={`role-${user.id}`}>
+                Роль
+              </label>
               <select
                 id={`role-${user.id}`}
                 className="auth-input"
@@ -120,11 +138,17 @@ const AdminUsers = ({ userId }: { userId: number }) => {
                 <option value="user">Пользователь</option>
                 <option value="admin">Администратор</option>
               </select>
-              <button type="button" disabled={isLoad} onClick={() => {
-                if (window.confirm(`Удалить аккаунт ${user.clientName}?`)) {
-                  deleteUser(user.id, token);
-                }
-              }}>Удалить аккаунт</button>
+              <button
+                type="button"
+                disabled={isLoad}
+                onClick={() => {
+                  if (window.confirm(`Удалить аккаунт ${user.clientName}?`)) {
+                    deleteUser(user.id, token);
+                  }
+                }}
+              >
+                Удалить аккаунт
+              </button>
             </div>
           </div>
         ))}
