@@ -10,20 +10,30 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import { useTranslation } from "react-i18next";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export interface PropsCartFav {
-  products: Product[];
+  product: Product;
 
   deleteFav: (id: number) => Promise<void>;
 }
 
-const CardProductFav = ({ products, deleteFav }: PropsCartFav) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  console.log(products);
+const CardProductFav = ({ product, deleteFav }: PropsCartFav) => {
+  const {
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+    attributes,
+  } = useSortable({ id: product.id });
   const { t, i18n } = useTranslation();
-  return products?.map((product) => (
+  return (
     <Card
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
       key={product.id}
       sx={{
         maxWidth: 320,
@@ -33,6 +43,9 @@ const CardProductFav = ({ products, deleteFav }: PropsCartFav) => {
         p: 2,
         border: "1px solid rgba(255, 255, 255, 0.1)",
         position: "relative",
+        transform: CSS.Transform.toString(transform),
+        cursor: isDragging ? "grabbing" : "grab",
+        opacity: isDragging ? 0.8 : 1,
       }}
     >
       <CardMedia
@@ -79,7 +92,7 @@ const CardProductFav = ({ products, deleteFav }: PropsCartFav) => {
         </Typography>
       </Stack>
     </Card>
-  ));
+  );
 };
 
 export default CardProductFav;

@@ -220,6 +220,13 @@ const Header = () => {
             )}
           </li>
           <li>
+            {tok && (
+              <Link className="navigation-item" to="/analytics">
+                Аналитика данных
+              </Link>
+            )}
+          </li>
+          <li>
             {tok && user.role === "admin" && (
               <Link className="navigation-item" to="/admin">
                 Админ-панель

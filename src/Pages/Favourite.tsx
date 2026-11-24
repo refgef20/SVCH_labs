@@ -9,8 +9,23 @@ import axios from "axios";
 import { Product } from "../components/Catalog/IProduct";
 import { changeToken } from "../slices/UserSlice";
 import upTok from "../updateTokenFunc";
-
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  rectSortingStrategy,
+  arrayMove,
+} from "@dnd-kit/sortable";
 const Favour = () => {
+  const senc = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+  );
   const tok = useSelector((state: RootState) => state.user.accessToken);
   const [products, setProd] = useState<Product[]>([]);
   const dispatch = useDispatch();
@@ -69,10 +84,37 @@ const Favour = () => {
       }
     }
   }
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over !== null && active.id !== over.id) {
+      const oldIndex = products.findIndex(
+        (product) => product.id === active.id,
+      );
+      const newIndex = products.findIndex((product) => product.id === over.id);
+      setProd(arrayMove(products, oldIndex, newIndex));
+    }
+  }
   return (
     <Container content="section">
       <Stack direction="row" sx={{ gap: 10 }}>
-        <CardProductFav products={products} deleteFav={deleteFav} />
+        <DndContext
+          sensors={senc}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={products.map((product) => product.id)}
+            strategy={rectSortingStrategy}
+          >
+            {products?.map((product) => (
+              <CardProductFav
+                key={product.id}
+                product={product}
+                deleteFav={deleteFav}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       </Stack>
     </Container>
   );

@@ -17,6 +17,7 @@ import Registration from "./Pages/Registration.tsx";
 import Prof from "./Pages/Profile.tsx";
 import Admin from "./Pages/Admin.tsx";
 import LoginWithOutPass from "./Pages/LoginWithOutPass.tsx";
+import DashBoard from "./Pages/DashBoard.tsx";
 
 const theme = createTheme({
   typography: {
@@ -120,6 +121,7 @@ function App() {
               element={<LoginWithOutPass />}
             ></Route>
             <Route path="/profile" element={<Prof />}></Route>
+            <Route path="/analytics" element={<DashBoard />}></Route>
             <Route path="/admin" element={<Admin />}></Route>
           </Routes>
         </main>
