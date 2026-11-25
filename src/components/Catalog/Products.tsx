@@ -180,6 +180,7 @@ const Products = () => {
           console.log("Ошибка бека:", err);
           if (err.status == 422) {
             const newtok = await upTok();
+            if (!newtok.token) return;
             dispatch(changeToken(newtok.token));
             getUser(newtok.token);
           }
@@ -188,7 +189,7 @@ const Products = () => {
         }
       }
     }
-    getUser(tok);
+    if (tok) getUser(tok);
   }, [dispatch]);
 
   const [value, setValue] = useState("sort");
@@ -241,6 +242,7 @@ const Products = () => {
         }
         if (err.status == 422) {
           const newTok = await upTok();
+          if (!newTok.token) return;
           dispatch(changeToken(newTok.token));
         }
       } else {
@@ -268,6 +270,7 @@ const Products = () => {
         }
         if (err.status == 422) {
           const newTok = await upTok();
+          if (!newTok.token) return;
           dispatch(changeToken(newTok.token));
         }
       } else {

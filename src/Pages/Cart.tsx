@@ -31,7 +31,7 @@ const Cart = () => {
           console.log("Ошибка от бэкенда:", err.response.data.message);
           if (err.status == 422) {
             const newtok = await upTok();
-            console.log("Токен в компоненте:", newtok.token);
+            if (!newtok.token) return;
 
             dispatch(changeToken(newtok.token));
           }
@@ -63,6 +63,7 @@ const Cart = () => {
         console.log("Ошибка от бэкенда:", err.response.data.message);
         if (err.status == 422) {
           const newtok = await upTok();
+          if (!newtok.token) return;
 
           dispatch(changeToken(newtok.token));
         }

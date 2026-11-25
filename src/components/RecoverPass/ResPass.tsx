@@ -1,15 +1,14 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import "../Authoriz&Register/auth&register.css";
-import { RootState } from "../../store";
 import axios from "axios";
 import { changeToken } from "../../slices/UserSlice";
 import { useState } from "react";
-import { UserInfo, UserOne } from "../Profile/Prof";
+import { UserInfo } from "../Profile/Prof";
 import { useNavigate } from "react-router-dom";
 
 const RecPass = () => {
   const navig = useNavigate();
-  const token = useSelector((state: RootState) => state.user.accessToken);
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const [user, setUser] = useState<UserInfo>({
     clientName: "",
@@ -21,14 +20,18 @@ const RecPass = () => {
   }
 
   async function login(user: UserInfo) {
-    const res = await axios.post(
-      "http://localhost:5000/api/auth/loginWithOutPass",
-      user,
-      {
-        withCredentials: true,
-      },
-    );
-    dispatch(changeToken(res.data.token));
+    setError("");
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/loginWithOutPass",
+        user,
+        { withCredentials: true },
+      );
+      dispatch(changeToken(res.data.token));
+      navig("/");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Не удалось связаться с сервером");
+    }
   }
 
   return (
@@ -44,7 +47,6 @@ const RecPass = () => {
           onSubmit={(e) => {
             e.preventDefault();
             login(user);
-            navig("/");
           }}
         >
           <div className="auth-field">
@@ -74,6 +76,7 @@ const RecPass = () => {
             />
           </div>
 
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <button type="submit" className="auth-button">
             Войти
           </button>

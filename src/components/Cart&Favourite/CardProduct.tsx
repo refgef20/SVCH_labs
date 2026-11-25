@@ -69,6 +69,7 @@ const CardProduct = ({ products, deleteCart }: PropsCartFav) => {
         console.log("Ошибка бека:", err);
         if (err.status == 422) {
           const newtok = await upTok();
+          if (!newtok.token) return;
           dispatch(changeToken(newtok.token));
           postOrder(order, newtok.token);
         }

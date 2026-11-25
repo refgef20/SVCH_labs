@@ -69,6 +69,7 @@ const Profile = () => {
           console.log("Ошибка бека:", err);
           if (err.status == 422) {
             const newtok = await upTok();
+            if (!newtok.token) return;
             dispatch(changeToken(newtok.token));
             getUser(newtok.token);
           }
@@ -103,6 +104,7 @@ const Profile = () => {
         console.log("Ошибка бека:", err);
         if (err.status == 422) {
           const newtok = await upTok();
+          if (!newtok.token) return;
           dispatch(changeToken(newtok.token));
           destroy(newtok.token);
         }
@@ -133,6 +135,7 @@ const Profile = () => {
         console.log("Ошибка бека:", err);
         if (err.status == 422) {
           const newtok = await upTok();
+          if (!newtok.token) return;
           dispatch(changeToken(newtok.token));
           UpPass(pass, newtok.token);
         }
@@ -161,6 +164,7 @@ const Profile = () => {
         console.log("Ошибка бека:", err);
         if (err.status == 422) {
           const newtok = await upTok();
+          if (!newtok.token) return;
           dispatch(changeToken(newtok.token));
           UpOnfo(info, newtok.token);
         }

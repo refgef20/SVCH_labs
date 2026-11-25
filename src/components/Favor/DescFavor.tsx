@@ -98,6 +98,7 @@ const DescFavor = () => {
         console.error("Ошибка бека", error);
         if (error.status == 422) {
           const newtok = await upTok();
+          if (!newtok.token) return;
           dispatch(changeToken(newtok.token));
           postAppoint(newtok.token);
         }

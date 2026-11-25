@@ -30,6 +30,7 @@ const Appoint = () => {
           console.error("Ошибка бека:", err);
           if (err.status == 422) {
             const newTok = await upTok();
+            if (!newTok.token) return;
             dispatch(changeToken(newTok.token));
             fetchGet(newTok.token);
           }
@@ -60,6 +61,7 @@ const Appoint = () => {
       if (err.response && err.response.data) {
         if (err.status == 422) {
           const newTok = await upTok();
+          if (!newTok.token) return;
           dispatch(changeToken(newTok.token));
         }
       }
