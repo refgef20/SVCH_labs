@@ -10,8 +10,145 @@ import { useDispatch, useSelector } from "react-redux";
 import upTok from "../../updateTokenFunc.tsx";
 import { changeToken } from "../../slices/UserSlice.ts";
 import { UserOne } from "../Profile/Prof.tsx";
+import DataTable, { TableColumn } from "react-data-table-component";
+import { createTheme } from "react-data-table-component";
+
+interface ProdCol {
+  photo: string;
+  name: string;
+  price: number;
+  description: string;
+}
 
 const Products = () => {
+  const ExpandedComponent = ({ data }: { data: Product }) => (
+    <div>
+      <p>Категория: {data.category}</p>
+      <p>Рейтинг товара: {data.rating} ⭐</p>
+    </div>
+  );
+  const column: TableColumn<Product>[] = [
+    { name: "Фото", cell: (row) => <img src={row.photo} alt={row.name} /> },
+    {
+      name: "Название",
+      selector: (row) => row.name,
+      sortable: true,
+      cell: (row) =>
+        row.id == idSel ? (
+          <input
+            type="text"
+            defaultValue={row.name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        ) : (
+          <p>{row.name}</p>
+        ),
+    },
+    {
+      name: "Описание",
+      selector: (row) => row.description,
+      wrap: true,
+      cell: (row) =>
+        row.id === idSel ? (
+          <input
+            type="text"
+            defaultValue={row.description}
+            onChange={(e) => setdescription(e.target.value)}
+          />
+        ) : (
+          <p>{row.description}</p>
+        ),
+    },
+    {
+      name: "Цена",
+      selector: (row) => row.price,
+      sortable: true,
+      cell: (row) =>
+        row.id === idSel ? (
+          <input
+            type="text"
+            defaultValue={row.price}
+            onChange={(e) => setPrice(Number(e.target.value))}
+          />
+        ) : (
+          <p>{row.price}</p>
+        ),
+    },
+    {
+      name: "",
+      cell: (row) => (
+        <div className="cont-redact">
+          <span
+            onClick={(e) => {
+              addCart(row.id);
+              alert("Товар добавлен в корзину");
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            🛒
+          </span>
+          <span
+            onClick={(e) => {
+              addFavourite(row.id);
+              alert("Товар добавлен в избранное");
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            ❤️
+          </span>
+
+          {row.id === idSel ? (
+            <>
+              <span
+                onClick={() => {
+                  deleteP(row.id, tok);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                🗑️
+              </span>
+              <span
+                onClick={() => {
+                  redactP({ idSel, name, description, price }, tok);
+                  setId(NaN);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                ✔️
+              </span>
+            </>
+          ) : (
+            <>
+              {user.role === "admin" && (
+                <span
+                  onClick={() => {
+                    deleteP(row.id, tok);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  🗑️
+                </span>
+              )}
+              {user.role === "admin" && (
+                <span
+                  onClick={() => {
+                    setId(row.id);
+                    setName(row.name);
+                    setdescription(row.description);
+                    setPrice(row.price);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  ✒️
+                </span>
+              )}
+            </>
+          )}
+        </div>
+      ),
+    },
+  ];
+
   const tok = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
@@ -228,7 +365,16 @@ const Products = () => {
           </MenuItem>
         </Select>
       </Stack>
-      {productsall.map((product) => (
+      <DataTable
+        columns={column}
+        data={productsall}
+        theme="dark"
+        pagination
+        paginationPerPage={4}
+        expandableRows
+        expandableRowsComponent={ExpandedComponent}
+      ></DataTable>
+      {/* {productsall.map((product) => (
         <div key={product.id} className="container-for-every-card-mets">
           <img className="img-prod" src={product.photo} alt="" />
           {product.id == idSel ? (
@@ -335,8 +481,8 @@ const Products = () => {
               )}
             </div>
           </div>
-        </div>
-      ))}
+        </div> 
+      ))}*/}
     </section>
   );
 };

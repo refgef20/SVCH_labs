@@ -6,39 +6,67 @@ import { User } from "./IUser";
 import axios from "axios";
 import { changeToken } from "../../slices/UserSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const AuthForm = z.object({
+  clientPhone: z
+    .string()
+    .regex(/^\+7\d{10}$/, "Введите номер в формате +7XXXXXXXXXX"),
+  password: z.string().min(6).optional(),
+  isSmsLogin: z.boolean().optional(),
+  clientName: z.string().optional(),
+});
 
 const Auth = () => {
+  type authForm = z.infer<typeof AuthForm>;
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setError,
+    formState: { errors },
+  } = useForm<authForm>({
+    resolver: zodResolver(AuthForm),
+  });
+  const isSmsLogin = watch("isSmsLogin");
   const navig = useNavigate();
   const dispatch = useDispatch();
-  const [user, setUser] = useState<User>({
-    clientPhone: "",
-    password: "",
-  });
-  const [error, setErrorMes] = useState("");
 
-  function handleChange(key: string, value: string) {
-    setUser((prev) => ({ ...prev, [key]: value }));
-  }
-
-  async function postUser(user: User) {
+  const onSubmit: SubmitHandler<authForm> = async (data) => {
     try {
-      const userTok = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        user,
-        { withCredentials: true },
-      );
+      if (data.isSmsLogin) {
+        const res = await axios.post(
+          "http://localhost:5000/api/auth/loginWithOutPass",
+          data,
+          {
+            withCredentials: true,
+          },
+        );
+        dispatch(changeToken(res.data.token));
+        navig("/");
+      } else {
+        const userTok = await axios.post(
+          "http://localhost:5000/api/auth/login",
+          data,
+          { withCredentials: true },
+        );
 
-      dispatch(changeToken(userTok.data.token));
-      navig("/");
+        dispatch(changeToken(userTok.data.token));
+      }
     } catch (err: any) {
       if (err.response && err.response.data) {
         console.log("Ошибка от бэкенда:", err.response.data.message);
-        setErrorMes(err.response.data.message);
+        setError("root", {
+          type: "manual",
+          message: err.response.data.message,
+        });
       } else {
         console.log("Ошибка сети:", err.message);
       }
     }
-  }
+  };
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -46,52 +74,49 @@ const Auth = () => {
         <p className="auth-subtitle">
           Введите ваши данные для доступа к личному кабинету
         </p>
-
-        <form
-          className="auth-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            postUser(user);
-          }}
-        >
+        {errors.root && (
+          <div style={{ color: "red", marginBottom: "10px" }}>
+            {errors.root.message}
+          </div>
+        )}
+        <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="auth-field">
             <label className="auth-label">Номер телефона</label>
             <input
               required
               type="text"
-              name="clientPhone"
               placeholder="+7 (___) ___-__-__"
               className="auth-input"
-              onChange={(e) => {
-                handleChange(e.target.name, e.target.value);
-              }}
+              {...register("clientPhone")}
             />
-          </div>
-
-          <div className="auth-field">
-            <label className="auth-label">Пароль</label>
-            <input
-              required
-              type="password"
-              name="password"
-              placeholder="••••••••"
-              className="auth-input"
-              onChange={(e) => {
-                handleChange(e.target.name, e.target.value);
-              }}
-            />
-            {error && (
-              <span
-                style={{
-                  color: "#ff4d4d",
-                  fontSize: "0.8rem",
-                  marginTop: "4px",
-                }}
-              >
-                {error}
+            {errors.clientPhone && (
+              <span style={{ color: "red", fontSize: "12px" }}>
+                {errors.clientPhone.message}
               </span>
             )}
           </div>
+
+          <label style={{ color: "white" }}>
+            <input type="checkbox" {...register("isSmsLogin")} />
+            Войти по имени
+          </label>
+
+          {isSmsLogin ? (
+            <div className="auth-field">
+              <label style={{ color: "white" }}>Имя</label>
+              <input className="auth-input" {...register("clientName")} />
+            </div>
+          ) : (
+            <div className="auth-field">
+              <label style={{ color: "white" }}>Пароль</label>
+              <input
+                {...register("password")}
+                className="auth-input"
+                type="password"
+              />
+              {errors.password && <span>{errors.password.message}</span>}
+            </div>
+          )}
 
           <button type="submit" className="auth-button">
             Войти
