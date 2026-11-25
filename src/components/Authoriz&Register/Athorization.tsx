@@ -4,7 +4,7 @@ import { RootState } from "../../store";
 import { useState } from "react";
 import { User } from "./IUser";
 import axios from "axios";
-import { changeToken } from "../../slices/UserSlice";
+import { changeToken, changeUser } from "../../slices/UserSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,6 +45,7 @@ const Auth = () => {
           },
         );
         dispatch(changeToken(res.data.token));
+        dispatch(changeUser(res.data.user));
         navig("/");
       } else {
         const userTok = await axios.post(
@@ -54,6 +55,7 @@ const Auth = () => {
         );
 
         dispatch(changeToken(userTok.data.token));
+        dispatch(changeUser(userTok.data.user));
       }
     } catch (err: any) {
       if (err.response && err.response.data) {

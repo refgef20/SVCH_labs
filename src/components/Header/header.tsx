@@ -11,42 +11,11 @@ import upTok from "../../updateTokenFunc";
 import { UserOne } from "../Profile/Prof";
 
 const Header = () => {
-  const [user, setUser] = useState<UserOne>({
-    id: NaN,
-    clientName: "",
-    clientPhone: "",
-    password: "",
-    role: "user",
-  });
   const tok = useSelector((state: RootState) => state.user.accessToken);
+  const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
   const navig = useNavigate();
-
-  useEffect(() => {
-    async function getUser(token: string) {
-      try {
-        const res = await axios.get("http://localhost:5000/api/user", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
-        setUser(res.data);
-      } catch (err: any) {
-        if (err.response && err.response.data) {
-          console.log("Ошибка бека:", err);
-          if (err.status == 422) {
-            const newtok = await upTok();
-            dispatch(changeToken(newtok.token));
-            getUser(newtok.token);
-          }
-        } else {
-          console.log("Oшибка сети:", err);
-        }
-      }
-    }
-    getUser(tok);
-  }, [dispatch]);
+  console.log("Данные пользователя из Redux:", user);
 
   async function logout(token: string) {
     try {
@@ -227,7 +196,7 @@ const Header = () => {
             )}
           </li>
           <li>
-            {tok && user.role === "admin" && (
+            {tok && user.role == "admin" && (
               <Link className="navigation-item" to="/admin">
                 Админ-панель
               </Link>

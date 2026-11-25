@@ -40,7 +40,6 @@ const AdminProducts = () => {
   const priceVal = watch("price");
 
   const onSubmit: SubmitHandler<ProductsAdd> = async (data) => {
-    // Выносим логику запроса в отдельную асинхронную функцию
     const sendRequest = async (token: string) => {
       try {
         await axios.post("http://localhost:5000/api/product", data, {
@@ -71,115 +70,106 @@ const AdminProducts = () => {
       <h3 className="section-title">Создание товара</h3>
       {errors && <p role="alert">{errors.root?.message}</p>}
       {message && <p role="status">{message}</p>}
-      {step === 1 && (
-        <form
-          className="profile-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit(onSubmit);
-          }}
-        >
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="product-name">
-              Название
-            </label>
-            <input
-              id="product-name"
-              type="text"
-              className="auth-input"
-              {...register("name")}
-              required
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="product-description">
-              Описание
-            </label>
-            <textarea
-              id="product-description"
-              className="auth-input"
-              {...register("description")}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="product-category">
-              Категория
-            </label>
+      <form className="profile-form" onSubmit={handleSubmit(onSubmit)}>
+        {/* ШАГ 1 */}
+        {step === 1 && (
+          <>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="product-name">
+                Название
+              </label>
+              <input
+                id="product-name"
+                type="text"
+                className="auth-input"
+                {...register("name")}
+              />
+            </div>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="product-description">
+                Описание
+              </label>
+              <textarea
+                id="product-description"
+                className="auth-input"
+                {...register("description")}
+              />
+            </div>
+            <div className="auth-field">
+              <label className="auth-label">Категория</label>
+              <Controller
+                name="category"
+                control={control}
+                render={({ field }) => (
+                  <select {...field}>
+                    {["Styling tools", "Daily care", "Hair treatment"].map(
+                      (cat) => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                )}
+              />
+            </div>
+            <button type="button" onClick={() => setStep(2)}>
+              Далее
+            </button>
+          </>
+        )}
 
-            <Controller
-              name="category"
-              control={control}
-              render={({ field }) => (
-                <select {...field}>
-                  {["Styling tools", "Daily care", "Hair treatment"].map(
-                    (cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    ),
-                  )}
-                </select>
-              )}
-            ></Controller>
-          </div>
-          <button type="button" onClick={() => setStep(2)}>
-            Далее
-          </button>
-        </form>
-      )}
-
-      {step === 2 && (
-        <form>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="product-photo">
-              Ссылка на фото
-            </label>
-            <input
-              id="product-photo"
-              type="url"
-              className="auth-input"
-              required
-              {...register("photo")}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="product-price">
-              Цена: {priceVal}
-            </label>
-            <input
-              id="product-price"
-              type="range"
-              className="auth-input"
-              min="0"
-              max="1000"
-              step="5"
-              {...register("price")}
-              required
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="product-rating">
-              Рейтинг
-            </label>
-            <input
-              id="product-rating"
-              type="number"
-              className="auth-input"
-              min="0"
-              max="5"
-              step="0.1"
-              {...register("rating")}
-              required
-            />
-          </div>
-          <button type="button" onClick={() => setStep(1)}>
-            Назад
-          </button>
-          <button className="auth-button" type="submit" disabled={isLoad}>
-            {isLoad ? "Сохранение..." : "Создать товар"}
-          </button>
-        </form>
-      )}
+        {/* ШАГ 2 */}
+        {step === 2 && (
+          <>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="product-photo">
+                Ссылка на фото
+              </label>
+              <input
+                id="product-photo"
+                type="url"
+                className="auth-input"
+                {...register("photo")}
+              />
+            </div>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="product-price">
+                Цена: {priceVal}
+              </label>
+              <input
+                id="product-price"
+                type="range"
+                className="auth-input"
+                min="0"
+                max="1000"
+                step="5"
+                {...register("price", { valueAsNumber: true })}
+              />
+            </div>
+            <div className="auth-field">
+              <label className="auth-label" htmlFor="product-rating">
+                Рейтинг
+              </label>
+              <input
+                id="product-rating"
+                type="number"
+                className="auth-input"
+                min="0"
+                max="5"
+                step="0.1"
+                {...register("rating", { valueAsNumber: true })}
+              />
+            </div>
+            <button type="button" onClick={() => setStep(1)}>
+              Назад
+            </button>
+            <button className="auth-button" type="submit" disabled={isLoad}>
+              {isLoad ? "Сохранение..." : "Создать товар"}
+            </button>
+          </>
+        )}
+      </form>
     </section>
   );
 };
