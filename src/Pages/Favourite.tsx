@@ -47,7 +47,7 @@ const Favour = () => {
           console.log("Ошибка от бэкенда:", err.response.data.message);
           if (err.status == 422) {
             const newtok = await upTok();
-            if (!newtok.token) return;
+            console.log("Токен в компоненте:", newtok);
             dispatch(changeToken(newtok.token));
             getFav(newtok.token);
           }

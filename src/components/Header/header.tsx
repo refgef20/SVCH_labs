@@ -4,22 +4,25 @@ import "../../index.css";
 import React, { Component, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import Store, { RootState } from "../../store";
+import { RootState } from "../../store";
 import axios from "axios";
 import { changeToken } from "../../slices/UserSlice";
 import upTok from "../../updateTokenFunc";
 import { UserOne } from "../Profile/Prof";
 
 const Header = () => {
-  const [user, setUser] = useState<UserOne | null>(null);
+  const [user, setUser] = useState<UserOne>({
+    id: NaN,
+    clientName: "",
+    clientPhone: "",
+    password: "",
+    role: "user",
+  });
   const tok = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useDispatch();
   const navig = useNavigate();
 
   useEffect(() => {
-    setUser(null);
-    if (!tok) return;
-    let active = true;
     async function getUser(token: string) {
       try {
         const res = await axios.get("http://localhost:5000/api/user", {
@@ -28,13 +31,14 @@ const Header = () => {
           },
           withCredentials: true,
         });
-        if (active) setUser(res.data);
+        setUser(res.data);
       } catch (err: any) {
         if (err.response && err.response.data) {
-          console.log("Ошибка бека:", err.response.data.message);
+          console.log("Ошибка бека:", err);
           if (err.status == 422) {
             const newtok = await upTok();
-            if (active && newtok.token) dispatch(changeToken(newtok.token));
+            dispatch(changeToken(newtok.token));
+            getUser(newtok.token);
           }
         } else {
           console.log("Oшибка сети:", err);
@@ -42,14 +46,11 @@ const Header = () => {
       }
     }
     getUser(tok);
-    return () => {
-      active = false;
-    };
-  }, [tok, dispatch]);
+  }, [dispatch]);
 
-  async function logout(token: string, retry = true): Promise<void> {
+  async function logout(token: string) {
     try {
-      await axios.post(
+      const res = await axios.post(
         "http://localhost:5000/api/auth/logout",
         {},
         {
@@ -62,10 +63,15 @@ const Header = () => {
     } catch (err: any) {
       if (err.response && err.response.data) {
         console.log("Ошибка от бэкенда:", err.response.data.message);
-        if (err.response.status === 422 && retry) {
-          const newtok = await upTok();
-          if (newtok.token) return logout(newtok.token, false);
-          if (!Store.getState().user.accessToken) navig("/authorization");
+        if (err.status == 422) {
+          const token = await axios.post(
+            `http://localhost:5000/api/auth/refresh`,
+            {},
+            {
+              withCredentials: true,
+            },
+          );
+          dispatch(changeToken(token.data));
         }
       } else {
         console.log("Ошибка сети:", err.message);
@@ -221,7 +227,7 @@ const Header = () => {
             )}
           </li>
           <li>
-            {tok && user?.role === "admin" && (
+            {tok && user.role === "admin" && (
               <Link className="navigation-item" to="/admin">
                 Админ-панель
               </Link>

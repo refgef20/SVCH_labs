@@ -1,5 +1,8 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./auth&register.css";
+import { RootState } from "../../store";
+import { useState } from "react";
+import { User } from "./IUser";
 import axios from "axios";
 import { changeToken } from "../../slices/UserSlice";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,16 +14,9 @@ const AuthForm = z.object({
   clientPhone: z
     .string()
     .regex(/^\+7\d{10}$/, "Введите номер в формате +7XXXXXXXXXX"),
-  password: z.string().optional(),
+  password: z.string().min(6).optional(),
   isSmsLogin: z.boolean().optional(),
   clientName: z.string().optional(),
-}).superRefine((data, ctx) => {
-  if (data.isSmsLogin && !data.clientName?.trim()) {
-    ctx.addIssue({ code: "custom", path: ["clientName"], message: "Введите имя" });
-  }
-  if (!data.isSmsLogin && (!data.password || data.password.length < 6)) {
-    ctx.addIssue({ code: "custom", path: ["password"], message: "Введите пароль длиной от 6 символов" });
-  }
 });
 
 const Auth = () => {
@@ -33,7 +29,6 @@ const Auth = () => {
     formState: { errors },
   } = useForm<authForm>({
     resolver: zodResolver(AuthForm),
-    shouldUnregister: true,
   });
   const isSmsLogin = watch("isSmsLogin");
   const navig = useNavigate();
@@ -50,6 +45,7 @@ const Auth = () => {
           },
         );
         dispatch(changeToken(res.data.token));
+        navig("/");
       } else {
         const userTok = await axios.post(
           "http://localhost:5000/api/auth/login",
@@ -59,7 +55,6 @@ const Auth = () => {
 
         dispatch(changeToken(userTok.data.token));
       }
-      navig("/");
     } catch (err: any) {
       if (err.response && err.response.data) {
         console.log("Ошибка от бэкенда:", err.response.data.message);
@@ -68,7 +63,7 @@ const Auth = () => {
           message: err.response.data.message,
         });
       } else {
-        setError("root", { message: "Не удалось связаться с сервером" });
+        console.log("Ошибка сети:", err.message);
       }
     }
   };
@@ -110,7 +105,6 @@ const Auth = () => {
             <div className="auth-field">
               <label style={{ color: "white" }}>Имя</label>
               <input className="auth-input" {...register("clientName")} />
-              {errors.clientName && <span>{errors.clientName.message}</span>}
             </div>
           ) : (
             <div className="auth-field">
@@ -139,7 +133,7 @@ const Auth = () => {
           <p className="auth-text-gray">
             Забыли пароль?{" "}
             <Link className="auth-link" to={"/loginWithOutPass"}>
-              Войти по имени
+              Восстановить пароль
             </Link>
           </p>
         </div>
